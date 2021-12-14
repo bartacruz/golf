@@ -37,15 +37,48 @@ class GolfCard(models.Model):
     
     account_move = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
 
+    stage_id = fields.Many2one(
+        "golf.cardstage",
+        string="Stage",
+        tracking=True,
+        index=True,
+        copy=False,
+        default=lambda self: self._default_stage_id(),
+    )
+
+    def _default_stage_id(self):
+        stage_ids = self.env["golf.cardstage"].search(
+            [("is_default", "=", True),],
+            order="sequence asc",
+            limit=1,
+        )
+        if stage_ids:
+            return stage_ids[0]
+        else:
+            raise ValidationError(_("You must create an golf stage first."))
+
     def _default_tournament_id(self):
         tournament_ids = self.env["golf.tournament"].search(
             [],
+            order="date asc",
             limit=1,
         )
         if tournament_ids:
             return tournament_ids[0]
         else:
             raise ValidationError(_("You must create an golf field first."))
+
+    @api.onchange('account_move')
+    def check_stage(self):
+        print("check_stage",self.stage_id.is_closed,self.account_move)
+        if not self.stage_id.is_closed and self.account_move:
+            stage = self.env["golf.cardstage"].search(
+            [("name", "=", 'Active'),],
+            limit=1,)
+            print("stage:",stage)
+            if len(stage):
+                self.stage_id=stage[0]
+
 
     @api.onchange("score_ids")
     def _calculate_score(self):
@@ -164,3 +197,30 @@ class GolfScore(models.Model):
 
     def get_field_name(self):
         return self.hole_id.field_id.name
+
+class GolfCardStage(models.Model):
+    _name = "golf.cardstage"
+    _description = "Golf Card Stage"
+    _order = "sequence, name, id"
+
+    name = fields.Char(string="Name", required=True)
+    sequence = fields.Integer(
+        "Sequence", default=1, help="Used to order stages. Lower is better."
+    )
+    is_closed = fields.Boolean(
+        "Is a close stage", help="Services in this stage are considered " "as closed."
+    )
+    is_default = fields.Boolean("Is a default stage", help="Used a default stage")
+    custom_color = fields.Char(
+        "Color Code", default="#FFFFFF", help="Use Hex Code only Ex:-#FFFFFF"
+    )
+    description = fields.Text(translate=True)
+    
+    @api.constrains("custom_color")
+    def _check_custom_color_hex_code(self):
+        if (
+            self.custom_color
+            and not self.custom_color.startswith("#")
+            or len(self.custom_color) != 7
+        ):
+            raise ValidationError(_("Color code should be Hex Code. Ex:-#FFFFFF"))

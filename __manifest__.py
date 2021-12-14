@@ -29,6 +29,7 @@
         'views/golf_card.xml',
         'views/golf_player.xml',
         'views/golf_tournament.xml',
+        'views/golf_cardstage.xml',
         'views/res_partner.xml',
         'views/menu.xml',
         #'views/menu.xml',

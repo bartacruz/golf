@@ -4,4 +4,4 @@ access_golf_hole_user,golf.hole.user,model_golf_hole,base.group_user,1,1,1,1
 access_golf_score_user,golf.score.user,model_golf_score,base.group_user,1,1,1,1
 access_golf_card_user,golf.card.user,model_golf_card,base.group_user,1,1,1,1
 access_golf_tournament_user,golf.tournament.user,model_golf_tournament,base.group_user,1,1,1,1
-
+access_golf_cardstage_user,golf.cardstage.user,model_golf_cardstage,base.group_user,1,1,1,1

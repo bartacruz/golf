@@ -42,7 +42,7 @@
         <field name="active" eval="True" />
         <field name="arch" type="xml">
             <tree string="model_tree" create="true" delete="true" edit="false">
-                <field name="player_id" />
+                <field name="player_id" widget="many2one_avatar"/>
                 <field name="player_handicap" />
                 <field name="gross_score" />
                 <field name="net_score" />
@@ -58,6 +58,10 @@
             <form string="model_form" create="true" delete="true" edit="true">
                 <field name="account_move" invisible="1" />
                 <header>
+                    <field
+                        name="stage_id"
+                        widget="statusbar"
+                    />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
