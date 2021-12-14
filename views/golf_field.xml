@@ -1,0 +1,104 @@
+<odoo>
+
+    <!-- VIEWS: "Human readable name"
+
+    - Model·········: model
+    - _rec_name·····: name
+    - Domain········: []
+    - Context·······: \{}
+    - Parent menu ··: base.menu_custom
+    - View priority·: 16    
+    - Sequence····..: 10
+    - Action help···: Something about model
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <!-- Tree view for "model" -->
+    <record id="view_golf_field_tree" model="ir.ui.view">
+        <field name="name">view.golf.field.tree</field>
+        <field name="model">golf.field</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="model_tree" create="true" delete="true" edit="true">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view for "model" -->
+    <record id="view_golf_field_form" model="ir.ui.view">
+        <field name="name">view.golf.field.form</field>
+        <field name="model">golf.field</field>
+        <field name="arch" type="xml">
+            <form string="model_form" create="true" delete="true" edit="true">
+                <header></header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" class="oe_inline" placeholder="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="par" />
+                        <field name="length_blue" />
+                        <field name="length_white" />
+                    </group>
+                    <group>
+                        <field name="hole_ids" widget="one2many_list">
+                            <tree editable="bottom">
+                                <field name="name" />
+                                <field name="number" />
+                                <field name="par" />
+                                <field name="handicap" />
+                                <field name="length_white" />
+                                <field name="length_blue" />
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view for "model" -->
+    <record id="view_golf_field_search" model="ir.ui.view">
+        <field name="name">view.golf.field.search</field>
+        <field name="model">golf.field</field>
+        <field name="type">search</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <search string="model_search">
+                <field name="name" />
+            </search>
+        </field>
+    </record>
+
+    <!-- Main window action for "model" -->
+    <record id="action_golf_field_act_window" model="ir.actions.act_window">
+        <field name="name">Golf field</field>
+        <field name="res_model">golf.field</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_golf_field_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to add new golf field
+            </p>
+            <p>
+            Something about 
+            </p>
+        </field>
+    </record>
+
+    <!-- Main menu for "model" -->
+    <record id="menu_golf_field" model="ir.ui.menu">
+        <field name="name">Golf field</field>
+        <field name="sequence" eval="10" />
+        <field name="action" ref="action_golf_field_act_window" />
+        <field name="parent_id" ref="base.menu_custom" />
+    </record>
+</odoo>

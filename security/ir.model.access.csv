@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_golf_field_user,golf.field.user,model_golf_field,base.group_user,1,1,1,1
+access_golf_hole_user,golf.hole.user,model_golf_hole,base.group_user,1,1,1,1
+access_golf_score_user,golf.score.user,model_golf_score,base.group_user,1,1,1,1
+access_golf_card_user,golf.card.user,model_golf_card,base.group_user,1,1,1,1
+access_golf_tournament_user,golf.tournament.user,model_golf_tournament,base.group_user,1,1,1,1
+

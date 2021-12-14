@@ -1,0 +1,16 @@
+<odoo noupdate="1">
+    <!-- Sequence for golf.card -->
+    <record id="seq_golf_card" model="ir.sequence">
+        <field name="name">Golf card</field>
+        <field name="code">golf.card</field>
+        <field name="prefix">C</field>
+        <field name="padding">6</field>
+    </record>
+    <!-- Sequence for golf.card -->
+    <record id="seq_golf_score" model="ir.sequence">
+        <field name="name">Golf score</field>
+        <field name="code">golf.score</field>
+        <field name="prefix">HS</field>
+        <field name="padding">8</field>
+    </record>
+</odoo>
