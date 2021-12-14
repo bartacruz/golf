@@ -3,7 +3,7 @@
     <menuitem id="menu_golf" name="Golf" sequence="10" web_icon="golf,static/description/icon.png" />
     <menuitem id="menu_golf_tournament" name="Tournaments" action="action_golf_tournament_act_window" parent="menu_golf" sequence="2" />
     <menuitem id="menu_golf_players" name="Players" action="action_golf_player_act_window" parent="menu_golf" sequence="2" />
-    <menuitem id="menu_golf_data" name="Data" sequence="2" parent="menu_golf"/>
+    <menuitem id="menu_golf_data" name="Data" sequence="3" parent="menu_golf"/>
     <menuitem id="menu_golf_field" name="Fields" action="action_golf_field_act_window" parent="menu_golf_data" sequence="2" />
     <menuitem id="menu_golf_card" name="Cards" action="action_golf_card_act_window" parent="menu_golf_data" sequence="3" />
 </odoo>

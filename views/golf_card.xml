@@ -1,7 +1,6 @@
-
 <odoo>
 
-<!-- VIEWS: "Human readable name"
+    <!-- VIEWS: "Human readable name"
 
     - Model·········: model
     - _rec_name·····: name
@@ -13,134 +12,158 @@
     - Action help···: Something about model
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-<!-- Tree view for "model" -->
-<record id="view_golf_card_tree" model="ir.ui.view">
-    <field name="name">view.golf.card.tree</field>
-    <field name="model">golf.card</field>
-    <field name="type">tree</field>
-    <field name="mode">primary</field>
-    <field name="priority" eval="16" />
-    <field name="active" eval="True" />
-    <field name="arch" type="xml">
-        <tree string="model_tree" create="true" delete="true" edit="true">
-            <field name="name" />
-            <field name="date" />
-            <field name="tournament_id" />
-            <field name="player_id" />
-            <field name="marker_id" />
-            <field name="gross_score" />
-            <field name="net_score" />
-        </tree>
-    </field>
-</record>
+    <!-- Tree view for "model" -->
+    <record id="view_golf_card_tree" model="ir.ui.view">
+        <field name="name">view.golf.card.tree</field>
+        <field name="model">golf.card</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="model_tree" create="true" delete="true" edit="true">
+                <field name="name" />
+                <field name="date" />
+                <field name="tournament_id" />
+                <field name="player_id" />
+                <field name="marker_id" />
+                <field name="gross_score" />
+                <field name="net_score" />
+            </tree>
+        </field>
+    </record>
 
-<record id="view_golf_card_leaderboard" model="ir.ui.view">
-    <field name="name">view.golf.card.leaderboard</field>
-    <field name="model">golf.card</field>
-    <field name="type">tree</field>
-    <field name="mode">primary</field>
-    <field name="priority" eval="99" />
-    <field name="active" eval="True" />
-    <field name="arch" type="xml">
-        <tree string="model_tree" create="true" delete="true" edit="false">
-            <field name="player_id" />
-            <field name="player_handicap" />
-            <field name="gross_score"/>
-            <field name="net_score" />
-        </tree>
-    </field>
-</record>
+    <record id="view_golf_card_leaderboard" model="ir.ui.view">
+        <field name="name">view.golf.card.leaderboard</field>
+        <field name="model">golf.card</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="99" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="model_tree" create="true" delete="true" edit="false">
+                <field name="player_id" />
+                <field name="player_handicap" />
+                <field name="gross_score" />
+                <field name="net_score" />
+            </tree>
+        </field>
+    </record>
 
-<!-- Form view for "model" -->
-<record id="view_golf_card_form" model="ir.ui.view">
-    <field name="name">view.golf.card.form</field>
-    <field name="model">golf.card</field>
-    <field name="arch" type="xml">
-        <form string="model_form" create="true" delete="true" edit="true">
-            <header>
-                    
-            </header>
-            <sheet>
-                <div class="oe_title">
-                    <label for="player_id" class="oe_edit_only" />
-                    <h1>
-                        <field name="player_id" class="oe_inline"/>
-                        
-                    </h1>
-                </div>
-                <group>
+    <!-- Form view for "model" -->
+    <record id="view_golf_card_form" model="ir.ui.view">
+        <field name="name">view.golf.card.form</field>
+        <field name="model">golf.card</field>
+        <field name="arch" type="xml">
+            <form string="model_form" create="true" delete="true" edit="true">
+                <field name="account_move" invisible="1" />
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" 
+                            type="object" 
+                            attrs="{'invisible': [('account_move', '=', False)]}" 
+                            name="action_view_invoice" 
+                            icon="fa-file" 
+                            context="{'card_id': active_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_span_text">Invoice</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" 
+                            type="object" 
+                            attrs="{'invisible': [('account_move', '!=', False)]}" 
+                            name="action_golf_card_invoice" 
+                            icon="fa-file" 
+                            context="{'card_id': active_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_span_text">Create Invoice</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="player_id" class="oe_edit_only" />
+                        <h1>
+                            <field name="player_id" class="oe_inline" />
+
+                        </h1>
+                    </div>
                     <group>
-                        <field name="name" placeholder="name" />
-                        <field name="marker_id" />
+                        <group>
+                            <field name="name" placeholder="name" />
+                            <field name="marker_id" />
+                        </group>
+                        <group>
+                            <field name="tournament_id" />
+                            <field name="date" />
+                            <field name="account_move" readonly="1" />
+                        </group>
                     </group>
                     <group>
-                        <field name="tournament_id" />
-                        <field name="date" />
+                        <field name="score_ids" widget="golf_card_o2m">
+                            <tree>
+                                <field name="hole_id" dislpay_type="hole_number" />
+                                <field name="score" />
+                                <field name="field_name" attrs="{'column_invisible': True}" />
+                            </tree>
+                        </field>
+                        <field name="gross_score" readonly="1" />
+                        <field name="player_handicap" />
+                        <field name="net_score" readonly="1" />
                     </group>
-                </group>
-                <group>
-                    <field name="score_ids" widget="golf_card_o2m">
-                        <tree>
-                            <field name="hole_id" dislpay_type="hole_number" />
-                            <field name="score" />
-                            <field name="field_name" attrs="{'column_invisible': True}" />
-                        </tree>
-                    </field>
-                    <field name="gross_score"  readonly="1" />
-                    <field name="player_handicap" />
-                    <field name="net_score" readonly="1" />
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-<!-- Search view for "model" -->
-<record id="view_golf_card_search" model="ir.ui.view">
-    <field name="name">view.golf.card.search</field>
-    <field name="model">golf.card</field>
-    <field name="type">search</field>
-    <field name="mode">primary</field>
-    <field name="priority" eval="16" />
-    <field name="active" eval="True" />
-    <field name="arch" type="xml">
-        <search string="model_search">
-            <field name="name" />
-            <field name="player_id" />
-            <field name="tournament_id" />
-            <field name="date" />
-        </search>
-    </field>
-</record>
+    <!-- Search view for "model" -->
+    <record id="view_golf_card_search" model="ir.ui.view">
+        <field name="name">view.golf.card.search</field>
+        <field name="model">golf.card</field>
+        <field name="type">search</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <search string="Card search">
+                <field name="name" />
+                <field name="player_id" />
+                <field name="tournament_id" />
+                <field name="date" />
+            </search>
+        </field>
+    </record>
 
-<!-- Main window action for "model" -->
-<record id="action_golf_card_act_window" model="ir.actions.act_window">
-    <field name="name">Golf Card</field>
-    <field name="res_model">golf.card</field>
-    <field name="view_mode">tree,form</field>
-    <field name="search_view_id" ref="view_golf_card_search" />
-    <field name="help" type="html">
-        <p class="oe_view_nocontent_create">
+    <!-- Main window action for "model" -->
+    <record id="action_golf_card_act_window" model="ir.actions.act_window">
+        <field name="name">Golf Card</field>
+        <field name="res_model">golf.card</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_golf_card_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
             Click to add new golf card
-        </p><p>
+        </p>
+            <p>
             Something about 
         </p>
-    </field>
-</record>
-<!-- Main window action for "model" -->
-<record id="action_golf_leaderboard_act_window" model="ir.actions.act_window">
-    <field name="name">Leaderboard</field>
-    <field name="res_model">golf.card</field>
-    <field name="view_mode">tree,form</field>
-    <field name="view_id" ref="view_golf_card_leaderboard" />
-    
-</record>
+        </field>
+    </record>
+    <!-- Main window action for "model" -->
+    <record id="action_golf_leaderboard_act_window" model="ir.actions.act_window">
+        <field name="name">Leaderboard</field>
+        <field name="res_model">golf.card</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_golf_card_leaderboard" />
 
-<!-- Main menu for "model" -->
-<record id="menu_golf_card" model="ir.ui.menu" >
-    <field name="name">Golf Card</field>
-    <field name="sequence" eval="10" />
-    <field name="action" ref="action_golf_card_act_window" />
-    <field name="parent_id" ref="base.menu_custom" />
-</record>
+    </record>
+
+    <!-- Main menu for "model" -->
+    <record id="menu_golf_card" model="ir.ui.menu">
+        <field name="name">Golf Card</field>
+        <field name="sequence" eval="10" />
+        <field name="action" ref="action_golf_card_act_window" />
+        <field name="parent_id" ref="base.menu_custom" />
+    </record>
 </odoo>
