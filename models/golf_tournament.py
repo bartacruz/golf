@@ -1,6 +1,6 @@
 from odoo import models, fields, _, api
 from odoo.exceptions import ValidationError
-from itertools import chain
+from itertools import chain, groupby
 
 class GolfTournament(models.Model):
     _name = 'golf.tournament'
@@ -46,5 +46,21 @@ class GolfTournament(models.Model):
             action["context"] = {}
             action["domain"] = ['&',("id", "in", tournament.card_ids.ids),("net_score",">",0)]
             return action
-    
-    
+
+    @api.onchange("card_ids")
+    def action_leaderboard(self):
+        cards = list(x for x in self.card_ids if x.net_score > 0)
+        #gross = sorted(cards,key=lambda x: x.net_score, reverse=True)
+        res = [list(v) for l,v in groupby(cards, lambda x: x.net_score,)]
+        res.sort(key=lambda x: x[0].net_score, reverse=True)
+        print("leaderboard",res)
+        position = 1
+        for tier in res:
+            tied = len(tier) > 1
+            for card in tier:
+                card.position=position
+                card.position_tied = tied
+            
+            position +=1
+
+

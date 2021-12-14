@@ -21,6 +21,11 @@ odoo.define('golf.cardo2m', (require) => {
             'keydown td': '_onKeyDown',
             'keydown th': '_onKeyDown',
         },
+        init: function (parent, state, params) {
+            this._super.apply(this, arguments);
+            this.parent = parent;
+
+        },
         _get_golf_field: function(name) {
             field = this.fields[name];
             if (!field) {
@@ -48,16 +53,27 @@ odoo.define('golf.cardo2m', (require) => {
             var self = this;
             this.fields = {};
             this.rows = [];
+            
 
             this.state.data.forEach(function (record, index) {
                 self.columns.forEach(function (node,index) {
-                    $cell = self._renderBodyCell(record, node, index, { mode: 'readonly' });
+                    var field = self._get_golf_field(record.data.field_name);
+                    var options = { renderWidgets: 1, mode:'readonly'}
+                    //console.debug("this-editable",self.editable, node.attrs.name);
+                    if (node.attrs.name == "score" && self.editable) {
+                        options['mode'] = 'edit';
+                    } else {
+                        options['mode'] = 'readonly';
+                    }
+                    $cell = self._renderBodyCell(record, node, index, options);
                     $cell.attr('data-id', record.id)
-                    field = self._get_golf_field(record.data.field_name);
+
+                    
                     if (index % 2 == 0) {
                         field.holes.append($cell);
                     } else {
                         field.scores.append($cell);
+                        
                     }
                 });
             });

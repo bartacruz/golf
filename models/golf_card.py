@@ -32,9 +32,23 @@ class GolfCard(models.Model):
 
     gross_score = fields.Integer()
     net_score = fields.Integer()
+    
     player_handicap = fields.Integer(
         string='Handicap', related='player_id.golf_handicap')
     
+    position = fields.Integer(default=0)
+    position_tied = fields.Boolean()
+    position_label = fields.Char(compute='_compute_position_label' )
+    
+    @api.depends('position','position_tied')
+    def _compute_position_label(self):
+        for record in self:
+            if record.position > 0:
+                tied = 'T' if record.position_tied else ''
+                record.position_label = '%s%s' % (tied,record.position, )
+                print(self.name,self.net_score,self.position_label)
+    
+
     account_move = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
 
     stage_id = fields.Many2one(
