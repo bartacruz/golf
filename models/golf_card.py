@@ -79,7 +79,6 @@ class GolfScore(models.Model):
     card_id = fields.Many2one('golf.card', string='Card', required=True, ondelete='cascade', index=True, copy=False)
     hole_id = fields.Many2one('golf.hole', string='Hole', required=True, ondelete='cascade', index=True, copy=False)
     field_name = fields.Char(compute='_set_field_name', store=True )
-    a_field_name = fields.Char(related = 'hole_id.field_id.name')
     
     score = fields.Integer(string='Score')
     

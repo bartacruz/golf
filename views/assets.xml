@@ -1,8 +1,6 @@
 <odoo>
     <template id="assets_backend" inherit_id="web.assets_backend" name="Golf Assets Backend">
         <xpath expr="//script[last()]" position="after">
-            <script type="text/javascript" src="/golf/static/src/js/golf_card.js"></script>
-            <script type="text/javascript" src="/golf/static/src/js/golf_card_widget.js"></script>
             <script type="text/javascript" src="/golf/static/src/js/golf_card_o2m.js"></script>
         </xpath>
         <xpath expr="link[last()]" position="after">
