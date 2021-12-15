@@ -2,6 +2,7 @@
     <template id="assets_backend" inherit_id="web.assets_backend" name="Golf Assets Backend">
         <xpath expr="//script[last()]" position="after">
             <script type="text/javascript" src="/golf/static/src/js/golf_card_o2m.js"></script>
+            <script type="text/javascript" src="/golf/static/src/js/golf_card_widget.js"></script>
         </xpath>
         <xpath expr="link[last()]" position="after">
             <link rel="stylesheet" type="text/scss" href="/golf/static/src/css/golf.scss"/>

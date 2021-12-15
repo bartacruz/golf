@@ -105,11 +105,10 @@
                         </group>
                     </group>
                     <group>
-                        <field name="score_ids" widget="golf_card_o2m" editable="1">
-                            <tree editable="bottom" create="0">
-                                <field name="hole_id" dislpay_type="hole_number" />
-                                <field name="score" />
-                                <field name="field_name" attrs="{'column_invisible': True}" />
+                        <field name="score_ids" widget="golf_card_widget" >
+                            <tree>
+                                <field name="hole_id"></field>
+                                <field name="score"></field>
                             </tree>
                         </field>
                         <field name="gross_score" readonly="1" />
