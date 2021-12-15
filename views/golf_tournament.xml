@@ -59,7 +59,7 @@
                     </group>
                     <notebook>
                         <page string="Cards">
-                            <field name="card_ids">
+                            <field name="card_ids" widget="one2many_list">
                                 <tree>
                                     <field name="player_id" />
                                     <field name="gross_score" />

@@ -13,9 +13,15 @@ odoo.define('golf.card_widget', function (require) {
          * @override
          */
         events : {
-            "blur input": "_onInputBlur",
+            "change input": "_onInputChange",
             "keydown input": "_onKeyDown",
+            "blur input": '_onScoreBlur',
+            "focus input": '_onScoreFocus',
         },
+        resetOnAnyFieldChange: true,
+        useSubview: true,
+        _focused : null,
+
         init: function (parent, name, record, options) {
             this._super.apply(this, arguments);
             this.fields = {};
@@ -31,15 +37,40 @@ odoo.define('golf.card_widget', function (require) {
             console.debug("GolfCardWidget Siet");
             return !!this.value && this.value.count;
         },
-
-        _onInputBlur: function(ev){
-            var $cell = $(ev.currentTarget);
-            var next = parseInt($cell.attr('tabIndex'))+1;
-            console.debug("blur",next,$cell,ev);
-            
-            if (this.editable) {
-                $cell.parents("o_golf_card").find("input[tabIndex='"+next+"]'").focus();
-                this.trigger_up('set_dirty', {dataPointID: this.dataPointID});  
+        _getValue: function(){
+            console.debug("_getValue",this);
+        },
+        _onInputChange: function(ev){
+            if (this.__isEditable()) {
+                var $cell = $(ev.currentTarget);
+                //this._setValue({ operation: 'UPDATE', id: record.id });
+                //this.trigger_up('set_dirty', {dataPointID: this.dataPointID});  
+                var cell_id = $cell.data("id");
+                var changes = { score_ids: { operation: "UPDATE", id: cell_id, data: { score: $cell.val() } } };
+                var initialEvent = { dataPointID: cell_id, changes: { score: $cell.val()}, };
+                console.debug("changes:",changes);
+                //console.debug("ievent:",initialEvent);
+                //console.debug("blur val",this._getValue());
+                // this._setValue({ operation: "UPDATE", id: cell_id, data: { score: $cell.val() } });
+                this.trigger_up('field_changed', {
+                    dataPointID: this.record.id,
+                    changes: changes,
+                    initialEvent: initialEvent, 
+                });
+            }
+        },
+        _onScoreBlur: function(ev){
+            if (this.__isEditable()) {
+                console.debug("blur",$(ev.currentTarget));
+                this._focused = null;
+            }
+        },
+        _onScoreFocus: function(ev){
+            if (this.__isEditable()) {
+                var $cell = $(ev.currentTarget);
+                this._focused = parseInt($cell.attr('tabIndex'));
+                console.debug("focus", this._focused);
+                $cell.select();
             }
         },
         
@@ -57,26 +88,7 @@ odoo.define('golf.card_widget', function (require) {
             var colIndex;
             
         },
-        
-        /**
-         * Instanciates or updates the adequate renderer.
-         *
-         * @override
-         * @private
-         * @returns {Promise|undefined}
-         */
-        _render: function () {
-            self = this;
-            var prm = this._rpc({
-                model: this.value.model,
-                method: 'search_read',
-                args: [[['id',"in",this.value.res_ids]]],
-            }).then(function (scores) {
-                self.scores = scores;
-                self._renderTable(scores);
-                return scores;
-            });
-        },
+
         _get_golf_field: function(name) {
             var field = this.fields[name];
             if (!field) {
@@ -92,16 +104,35 @@ odoo.define('golf.card_widget', function (require) {
             }
             return field;
         },
+        __isEditable: function() {
+            // Use the widget mode attribute to determine if we are editable
+            return this.mode && this.mode == 'edit';
+        },
+        
+        /**
+         * Instanciates or updates the adequate renderer.
+         *
+         * @override
+         * @private
+         * @returns {Promise|undefined}
+         */
+        _render: function () {
+            console.debug("_render",this.record.data.score_ids.data);
+            this._renderTable();
+        },
         _renderTable: function(scores) {
-            self = this;
+            var self = this;
+            // re-rendering triggers blur event and we loose the focusable
+            var focused = this._focused;
             console.debug("_renderTable",this,scores);
-            this.editable = this.$el.parents(".o_form_editable").length > 0;
-            
-            _.each(scores, function (score,index) {
-                var field = self._get_golf_field(score.field_name);
-                field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(score.hole_id[1]));
-                var input = $('<input/>', {type:'number'}).attr('data-id',score.id).attr("tabIndex",index+1).val(score.score);
-                if (!self.editable) {
+            this.rows=[];
+            this.fields = {};
+            _.each(this.record.data.score_ids.data,function (score,index) {
+                var field = self._get_golf_field(score.data.field_name);
+                //field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(score.data.hole_id.data.display_name))
+                field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(index+1))                    
+                var input = $('<input/>', {type:'number'}).attr('data-id',score.id).attr("tabIndex",index+1).val(score.data.score);
+                if (!self.__isEditable()) {
                     input.attr("readonly",1);
                 }
                 field.scores.append($('<td/>',{class: 'o_data_cell o_golf_score'}).append(input));
@@ -127,7 +158,12 @@ odoo.define('golf.card_widget', function (require) {
             tableWrapper.appendChild($table[0]);
             this.el.innerHTML = "";
             this.el.appendChild(tableWrapper);
-            console.debug("_renderTable",tableWrapper);         
+            console.debug("_renderTable",tableWrapper);
+            if (this.__isEditable() && focused) {
+                var next = focused + 1;
+                this.$el.find("input[tabIndex='"+next+"']").focus();
+                console.debug("focus to", next);
+            }
         },
     });
 

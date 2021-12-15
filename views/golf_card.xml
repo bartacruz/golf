@@ -109,6 +109,7 @@
                             <tree>
                                 <field name="hole_id"></field>
                                 <field name="score"></field>
+                                <field name="field_name"></field>
                             </tree>
                         </field>
                         <field name="gross_score" readonly="1" />

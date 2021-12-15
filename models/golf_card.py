@@ -30,8 +30,8 @@ class GolfCard(models.Model):
 
     score_ids = fields.One2many("golf.score", 'card_id', string="scores")
 
-    gross_score = fields.Integer()
-    net_score = fields.Integer()
+    gross_score = fields.Integer(compute='_calculate_score')
+    net_score = fields.Integer(compute='_calculate_score')
     
     player_handicap = fields.Integer(
         string='Handicap', related='player_id.golf_handicap')
@@ -93,14 +93,15 @@ class GolfCard(models.Model):
             if len(stage):
                 self.stage_id=stage[0]
 
-
-    @api.onchange("score_ids")
+    @api.depends("score_ids")
+    #@api.onchange("score_ids")
     def _calculate_score(self):
-        self.gross_score = sum(c.score for c in self.score_ids)
-        if self.gross_score > 0:
-            self.net_score = self.gross_score - self.player_id.golf_handicap
-        else:
-            self.net_score = 0
+        for rec in self:
+            rec.gross_score = sum(c.score for c in rec.score_ids)
+            if rec.gross_score > 0:
+                rec.net_score = rec.gross_score - rec.player_id.golf_handicap
+            else:
+                rec.net_score = 0
 
     @api.model
     def create(self, vals):
