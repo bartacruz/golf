@@ -41,10 +41,11 @@
         <field name="priority" eval="99" />
         <field name="active" eval="True" />
         <field name="arch" type="xml">
-            <tree string="model_tree" create="true" delete="true" edit="false">
+            <tree string="model_tree" create="true" delete="true" edit="false" default_order="net_score, gross_score, player_handicap,player_id">
+                <field name="position_label" string="Pos"/>
                 <field name="player_id" widget="many2one_avatar"/>
-                <field name="player_handicap" />
                 <field name="gross_score" />
+                <field name="player_handicap" />
                 <field name="net_score" />
             </tree>
         </field>

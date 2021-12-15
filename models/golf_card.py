@@ -30,15 +30,15 @@ class GolfCard(models.Model):
 
     score_ids = fields.One2many("golf.score", 'card_id', string="scores")
 
-    gross_score = fields.Integer(compute='_calculate_score')
-    net_score = fields.Integer(compute='_calculate_score')
+    gross_score = fields.Integer(compute='_calculate_score', store=True)
+    net_score = fields.Integer(compute='_calculate_score', store=True)
     
     player_handicap = fields.Integer(
         string='Handicap', related='player_id.golf_handicap')
     
     position = fields.Integer(default=0)
     position_tied = fields.Boolean()
-    position_label = fields.Char(compute='_compute_position_label' )
+    position_label = fields.Char(compute='_compute_position_label' , store=True)
     
     @api.depends('position','position_tied')
     def _compute_position_label(self):
@@ -46,7 +46,7 @@ class GolfCard(models.Model):
             if record.position > 0:
                 tied = 'T' if record.position_tied else ''
                 record.position_label = '%s%s' % (tied,record.position, )
-                print(self.name,self.net_score,self.position_label)
+                print(record.name,record.net_score,record.position_label)
     
 
     account_move = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
@@ -94,14 +94,17 @@ class GolfCard(models.Model):
                 self.stage_id=stage[0]
 
     @api.depends("score_ids")
-    #@api.onchange("score_ids")
     def _calculate_score(self):
         for rec in self:
+            net = rec.net_score # save it to detect changes
             rec.gross_score = sum(c.score for c in rec.score_ids)
             if rec.gross_score > 0:
                 rec.net_score = rec.gross_score - rec.player_id.golf_handicap
             else:
                 rec.net_score = 0
+
+            if net != rec.net_score:
+                rec.tournament_id.action_leaderboard()
 
     @api.model
     def create(self, vals):

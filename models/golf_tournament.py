@@ -1,7 +1,7 @@
 from odoo import models, fields, _, api
 from odoo.exceptions import ValidationError
 from itertools import chain, groupby
-
+from operator import attrgetter
 class GolfTournament(models.Model):
     _name = 'golf.tournament'
     _description = 'a golf tournament'
@@ -51,16 +51,18 @@ class GolfTournament(models.Model):
     def action_leaderboard(self):
         cards = list(x for x in self.card_ids if x.net_score > 0)
         #gross = sorted(cards,key=lambda x: x.net_score, reverse=True)
-        res = [list(v) for l,v in groupby(cards, lambda x: x.net_score,)]
-        res.sort(key=lambda x: x[0].net_score, reverse=True)
-        print("leaderboard",res)
+        print("cards:",cards,[x.net_score for x in cards])
+        get_net = attrgetter('net_score')
+        res = [list(v) for l,v in groupby(sorted(cards,key = get_net), get_net)]
+        print("grouped:",res)
+        
         position = 1
         for tier in res:
             tied = len(tier) > 1
             for card in tier:
                 card.position=position
                 card.position_tied = tied
-            
+                print(card.player_id.name,card.net_score,card.position,card.position_tied)
             position +=1
 
 
