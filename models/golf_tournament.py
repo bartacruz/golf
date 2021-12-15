@@ -22,6 +22,8 @@ class GolfTournament(models.Model):
 
     card_ids = fields.One2many('golf.card','tournament_id',string=_('Cards'))
     card_count = fields.Integer(compute = '_count_cards')
+    active_card_count = fields.Integer(compute = '_count_cards')
+    player_ids = fields.Many2many('res.partner', string='Players', domain=[("golf_player", "=", True)])
 
     default_product_id = fields.Many2one(
         string='Default Product',
@@ -29,9 +31,13 @@ class GolfTournament(models.Model):
         ondelete='restrict',
     )
     
+
+    @api.depends('card_ids')
     def _count_cards(self):
         for rec in self:
-            rec.card_count = len([x for x in rec.card_ids if x.net_score > 0])
+            rec.card_count = len(rec.card_ids)
+            rec.active_card_count = len([x for x in rec.card_ids if x.net_score > 0])
+            rec.player_ids = rec.mapped("card_ids.player_id")
     
     def get_holes(self):
         holes = []
@@ -47,15 +53,13 @@ class GolfTournament(models.Model):
             action["domain"] = ['&',("id", "in", tournament.card_ids.ids),("net_score",">",0)]
             return action
 
+    
     @api.onchange("card_ids")
     def action_leaderboard(self):
         cards = list(x for x in self.card_ids if x.net_score > 0)
         #gross = sorted(cards,key=lambda x: x.net_score, reverse=True)
-        print("cards:",cards,[x.net_score for x in cards])
         get_net = attrgetter('net_score')
-        res = [list(v) for l,v in groupby(sorted(cards,key = get_net), get_net)]
-        print("grouped:",res)
-        
+        res = [list(v) for l,v in groupby(sorted(cards,key = get_net), get_net)]        
         position = 1
         for tier in res:
             tied = len(tier) > 1

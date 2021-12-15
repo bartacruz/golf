@@ -33,11 +33,16 @@
         <field name="model">golf.tournament</field>
         <field name="arch" type="xml">
             <form string="model_form" create="true" delete="true" edit="true">
-                <header></header>
+                <header>
+
+                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" type="object" attrs="{'invisible': [('card_count', '=', 0)]}" name="action_open_leaderboard" icon="fa-id-card" context="{'tournament_id': active_id}">
-                            <field string="Leaderboard" name="card_count" widget="statinfo" />
+                        <button class="oe_stat_button" type="action" name="%(action_golf_card_act_window)d" icon="fa-id-card" context="{'tournament_id': active_id}">
+                            <field string="Cards" name="card_count" widget="statinfo" />
+                        </button>    
+                        <button class="oe_stat_button" type="object" attrs="{'invisible': [('active_card_count', '=', 0)]}" name="action_open_leaderboard" icon="fa-id-card" context="{'tournament_id': active_id}">
+                            <field string="Leaderboard" name="active_card_count" widget="statinfo" />
                         </button>
                     </div>
                     <div class="oe_title">
@@ -58,15 +63,16 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Cards">
-                            <field name="card_ids" widget="one2many_list">
+                        <page string="Players">
+                            <field name="player_ids" widget="many2many">
                                 <tree>
-                                    <field name="player_id" />
-                                    <field name="gross_score" />
-                                    <field name="player_handicap" />
-                                    <field name="net_score" />
+                                    <field name="image_128" widget="image" />
+                                    <field name="name" />
+                                    <field name="golf_handicap" />
+                                    <field name="phone" />
                                 </tree>
                             </field>
+                            
                         </page>
                     </notebook>
                 </sheet>
