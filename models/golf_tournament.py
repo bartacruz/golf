@@ -66,7 +66,7 @@ class GolfTournament(models.Model):
             for card in tier:
                 card.position=position
                 card.position_tied = tied
-                print(card.player_id.name,card.net_score,card.position,card.position_tied)
+                #print(card.player_id.name,card.net_score,card.position,card.position_tied)
             position +=1
 
 

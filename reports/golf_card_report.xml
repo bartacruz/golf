@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_common" name="golf_card_report_assets" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/golf/static/src/css/card.scss"/>
+        </xpath>
+    </template>
+    <template id="golf_card_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="card">
+                <t t-call="web.external_layout">
+                    <script>document.body.className += " golf_card_report";</script>
+                    <div class="card">
+                        <t t-foreach="range(0,100,10)" t-as="item">
+                            <div t-attf-style="position:absolute;left:0mm;top:{{item}}mm">
+                                <t t-esc="item"/>
+                            </div>
+                        </t>
+                        <t t-foreach="range(0,240,10)" t-as="item">
+                            <div t-out="item" t-attf-style="position:absolute;right:{{item}}mm;top:55mm">
+                                <t t-esc="item"/>
+                            </div>
+                        </t>
+                        <div class="card_data card_tournament" t-field="card.tournament_id.display_name" />
+                        <div class="card_data card_player_name" t-field="card.player_id.display_name" />
+                        <div class="card_data card_player_hcp" t-field="card.player_id.golf_handicap" />
+                        <div class="card_data card_player_license"  t-field="card.player_id.golf_license" />
+                        <div class="card_data card_date" t-field="card.date" />
+                        
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

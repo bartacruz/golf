@@ -26,4 +26,12 @@
         </notebook>
     </field>
 </record>
+<record id="golf_membership_invoice_action" model="ir.actions.server">
+    <field name="name">Generate Membership Invoice</field>
+    <field name="binding_model_id" ref="base.model_res_partner"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_golf_membership_invoice()</field>
+</record>
+
 </odoo>

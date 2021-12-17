@@ -14,7 +14,7 @@ class GolfCard(models.Model):
         copy=False
     )
 
-    date = fields.Date(string='Date')
+    date = fields.Date(string='Date', default=fields.datetime.now().date())
     tournament_id = fields.Many2one('golf.tournament',
                                     string='Tournament',
                                     required=True,
@@ -74,7 +74,7 @@ class GolfCard(models.Model):
     def _default_tournament_id(self):
         tournament_ids = self.env["golf.tournament"].search(
             [],
-            order="date asc",
+            order="date desc",
             limit=1,
         )
         if tournament_ids:
@@ -133,6 +133,7 @@ class GolfCard(models.Model):
 
         # TODO: use categories for products
         product = self.tournament_id.default_product_id
+
         invoice_line = {
             'product_id': product.id,
             'quantity': 1,
@@ -145,26 +146,19 @@ class GolfCard(models.Model):
             'payment_reference': self.name,
             'invoice_origin': self.tournament_id.name,
             'state' : 'draft',
-            #'journal_id': self.session_id.config_id.invoice_journal_id.id,
             'move_type': 'out_invoice',
             'ref': self.name,
             'partner_id': self.player_id.id,
             'narration': narration,
-            # considering partner's sale pricelist's currency
-            # 'currency_id': self.pricelist_id.currency_id.id,
             'invoice_user_id': self.env.context.get('user_id', self.env.user.id),
             'invoice_date': self.date,
-            # 'fiscal_position_id': self.fiscal_position_id.id,
             'invoice_line_ids': [(0, None, invoice_line)],
-            # 'invoice_cash_rounding_id': self.config_id.rounding_method.id
-            # if self.config_id.cash_rounding and (not self.config_id.only_round_cash_method or any(p.payment_method_id.is_cash_count for p in self.payment_ids))
-            # else False
+            
         }
+
         new_move = self.env['account.move'].sudo().with_context(
             default_move_type=move_vals['move_type']).create(move_vals)
-        #self.write({'account_move': new_move.id, 'state': 'invoiced'})
         self.write({'account_move': new_move.id})
-        new_move.sudo()._post()
 
         return {
             'name': _('Customer Invoice'),

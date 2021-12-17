@@ -7,4 +7,5 @@
     <menuitem id="menu_golf_field" name="Fields" action="action_golf_field_act_window" parent="menu_golf_data" sequence="2" />
     <menuitem id="menu_golf_card" name="Cards" action="action_golf_card_act_window" parent="menu_golf_data" sequence="3" />
     <menuitem id="menu_golf_cardstage" name="Card Stages" action="action_golf_cardstage_act_window" parent="menu_golf_data" sequence="3" />
+    <menuitem id="menu_golf_cardstage" name="Card Stages" action="action_golf_cardstage_act_window" parent="menu_golf_data" sequence="3" />
 </odoo>

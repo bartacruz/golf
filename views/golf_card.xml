@@ -142,7 +142,7 @@
 
     <!-- Main window action for "model" -->
     <record id="action_golf_card_act_window" model="ir.actions.act_window">
-        <field name="name">Golf Card</field>
+        <field name="name">Golf Cardo</field>
         <field name="res_model">golf.card</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_golf_card_search" />
@@ -155,6 +155,26 @@
         </p>
         </field>
     </record>
+
+    <record id="action_golf_cards_related" model="ir.actions.act_window">
+        <field name="name">Golf Cards</field>
+        <field name="res_model">golf.card</field>
+        <field name="view_mode">tree,form</field>
+
+        <field name="search_view_id" ref="view_golf_card_search" />
+        <field name="context">{'default_tournament_id': active_id}</field>
+        <field name="domain">[('tournament_id', '=', active_id)]</field>
+        
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to add new golf card
+        </p>
+            <p>
+            Something about 
+        </p>
+        </field>
+    </record>
+    
     <!-- Main window action for "model" -->
     <record id="action_golf_leaderboard_act_window" model="ir.actions.act_window">
         <field name="name">Leaderboard</field>
@@ -162,6 +182,30 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_golf_card_leaderboard" />
 
+    </record>
+
+    <record id="paperformat_golf_card" model="report.paperformat">
+        <field name="name">SPGC Card Format</field>
+        <field name="default" eval="False" />
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+    </record>
+
+    <record id="action_golf_card_report" model="ir.actions.report">
+        <field name="name">Golf Card</field>
+        <field name="model">golf.card</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">golf.golf_card_report</field>
+        <field name="report_file">golf.golf_card_report</field>
+        <field name="binding_model_id" ref="golf.model_golf_card"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="golf.paperformat_golf_card"/>
     </record>
 
     <!-- Main menu for "model" -->

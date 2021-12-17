@@ -1,0 +1,62 @@
+.golf_card_report {
+    /*
+        all elements are positionned for A4 format (210 x 297mm) but the viewport
+        is bigger than this, hence we zoom the whole page to be bigger than the viewport
+        which will then be resized down by wkhtmltopdf to get back to an A4 format
+     */
+    zoom: 1.29;
+    .card {
+        width: 233mm;
+        height: 93mm;
+        position: absolute;
+        right:1mm;
+        top:0mm;
+
+        border:1px solid;
+        
+        .marker {
+            border: 1px solid black;
+        }
+        .card_data {
+            position: absolute;
+            text-align:center;
+            border:1px dotted black;
+        }
+        .card_player_name {
+            
+            width: 60mm;
+            height: 5mm;
+            top: 7mm;
+            right:32mm;
+            
+        }
+        .card_player_hcp {
+            width: 10mm;
+            height: 5mm;
+            top: 7mm;
+            right:20mm;
+        }
+        .card_player_license {
+            width: 25mm;
+            height: 5mm;
+            top: 75mm;
+            left: 45mm;
+        }
+        .card_tournament {
+            width: 60mm;
+            height: 5mm;
+            top: 2mm;
+            left: 5mm;
+            font-size:8px;
+            text-align: left;
+            
+        }
+        .card_date {
+            width: 26mm;
+            height: 5mm;
+            top: 79mm;
+            left: 130mm;
+        }
+    }
+
+}

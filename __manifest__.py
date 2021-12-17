@@ -3,7 +3,7 @@
     'name': "Golf Club",
 
     'summary': "Golf Club Module",
-
+    'sequence': -100,
     'description': """
         Supercalifragilistico long description
     """,
@@ -15,10 +15,10 @@
     # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Sports',
-    'version': '14.0.0.1.9',
+    'version': '14.0.0.1.10',
 
     # any module necessary for this one to work correctly
-    'depends': ['base',],
+    'depends': ['base','mail','account'],
 
     # always loaded
     'data': [
@@ -32,6 +32,7 @@
         'views/golf_cardstage.xml',
         'views/res_partner.xml',
         'views/menu.xml',
+        'reports/golf_card_report.xml',
         #'views/menu.xml',
         #'views/res_partner.xml',
     ],
@@ -39,5 +40,5 @@
     'installable': True,
     'application': True,
     "development_status": "Alpha",
-    
+    'images': ['static/description/golf-icon.png'],
 }
