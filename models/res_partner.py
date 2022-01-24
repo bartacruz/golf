@@ -1,4 +1,4 @@
-from odoo import _,fields, models
+from odoo import _,fields, models, api
 import datetime
 import uuid
 
@@ -25,6 +25,23 @@ class ResPartner(models.Model):
         ondelete='restrict',
     )
 
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+        recs = self.search([('golf_license', operator, name)] + args, limit=limit)
+        if not recs.ids:
+            return super().name_search(name=name, args=args, operator=operator, limit=limit)
+        return recs.name_get()
+    
+    def name_get(self):
+        res = []
+        for partner in self:
+            name = partner._get_name()
+            if partner.golf_license:
+                name = '%s (%s)' % (name,partner.golf_license)
+            res.append((partner.id, name))
+        return res
+    
     def _golf_count_cards(self):
         for rec in self:
             rec.golf_card_count = len(rec.golf_card_ids)

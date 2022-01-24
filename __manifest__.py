@@ -15,7 +15,7 @@
     # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Sports',
-    'version': '14.0.0.1.10',
+    'version': '15.0.0.1.3',
 
     # any module necessary for this one to work correctly
     'depends': ['base','mail','account'],
@@ -24,7 +24,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/ir_sequence.xml',
-        'views/assets.xml',
+        #'views/assets.xml',
         'views/golf_field.xml',
         'views/golf_card.xml',
         'views/golf_player.xml',
@@ -41,4 +41,14 @@
     'application': True,
     "development_status": "Alpha",
     'images': ['static/description/golf-icon.png'],
+    'assets': {
+        'web.assets_backend': [
+            'golf/static/src/js/golf_card_o2m.js',
+            'golf/static/src/js/golf_card_widget.js',
+            'golf/static/src/css/golf.scss',
+        ],
+        'web.report_assets_common': [
+            'golf/static/src/css/card.scss',
+        ],
+    },
 }

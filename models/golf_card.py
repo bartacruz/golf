@@ -49,7 +49,7 @@ class GolfCard(models.Model):
                 print(record.name,record.net_score,record.position_label)
     
 
-    account_move = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
+    account_move_id = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
 
     stage_id = fields.Many2one(
         "golf.cardstage",
@@ -82,10 +82,10 @@ class GolfCard(models.Model):
         else:
             raise ValidationError(_("You must create an golf field first."))
 
-    @api.onchange('account_move')
+    @api.onchange('account_move_id')
     def check_stage(self):
-        print("check_stage",self.stage_id.is_closed,self.account_move)
-        if not self.stage_id.is_closed and self.account_move:
+        print("check_stage",self.stage_id.is_closed,self.account_move_id)
+        if not self.stage_id.is_closed and self.account_move_id:
             stage = self.env["golf.cardstage"].search(
             [("name", "=", 'Active'),],
             limit=1,)
@@ -133,22 +133,28 @@ class GolfCard(models.Model):
 
         # TODO: use categories for products
         product = self.tournament_id.default_product_id
-
+        player = self.player_id 
+        if player.property_product_pricelist:
+            price = player.property_product_pricelist.get_product_price(product,1,player)
+            name = '%s - %s' % (product.display_name,player.property_product_pricelist.name,)
+        else:
+            price = product.list_price
+            name = product.name
         invoice_line = {
             'product_id': product.id,
             'quantity': 1,
-            'price_unit': product.list_price,
-            'name': product.display_name,
+            'price_unit': price,
+            'name': name,
             'tax_ids': [(6, 0, product.taxes_id.ids)],
         }
-        narration = product.display_name + " - " + self.tournament_id.name
+        narration = '%s - %s' % (product.display_name, self.tournament_id.name,)
         move_vals = {
             'payment_reference': self.name,
             'invoice_origin': self.tournament_id.name,
             'state' : 'draft',
             'move_type': 'out_invoice',
             'ref': self.name,
-            'partner_id': self.player_id.id,
+            'partner_id': player.id,
             'narration': narration,
             'invoice_user_id': self.env.context.get('user_id', self.env.user.id),
             'invoice_date': self.date,
@@ -157,9 +163,9 @@ class GolfCard(models.Model):
         }
 
         new_move = self.env['account.move'].sudo().with_context(
-            default_move_type=move_vals['move_type']).create(move_vals)
-        self.write({'account_move': new_move.id})
-
+                    default_move_type=move_vals['move_type']).create(move_vals)
+        self.write({'account_move_id': new_move.id})
+        self.check_stage()
         return {
             'name': _('Customer Invoice'),
             'view_mode': 'form',

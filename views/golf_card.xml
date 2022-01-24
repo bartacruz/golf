@@ -22,13 +22,15 @@
         <field name="active" eval="True" />
         <field name="arch" type="xml">
             <tree string="model_tree" create="true" delete="true" edit="true">
-                <field name="name" />
+                <field name="player_id" />
                 <field name="date" />
                 <field name="tournament_id" />
-                <field name="player_id" />
+                <field name="stage_id" />
+                
                 <field name="marker_id" />
                 <field name="gross_score" />
                 <field name="net_score" />
+                <field name="position_label" />
             </tree>
         </field>
     </record>
@@ -57,7 +59,7 @@
         <field name="model">golf.card</field>
         <field name="arch" type="xml">
             <form string="model_form" create="true" delete="true" edit="true">
-                <field name="account_move" invisible="1" />
+                <field name="account_move_id" invisible="1" />
                 <header>
                     <field
                         name="stage_id"
@@ -68,7 +70,7 @@
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" 
                             type="object" 
-                            attrs="{'invisible': [('account_move', '=', False)]}" 
+                            attrs="{'invisible': [('account_move_id', '=', False)]}" 
                             name="action_view_invoice" 
                             icon="fa-file" 
                             context="{'card_id': active_id}">
@@ -78,7 +80,7 @@
                         </button>
                         <button class="oe_stat_button" 
                             type="object" 
-                            attrs="{'invisible': [('account_move', '!=', False)]}" 
+                            attrs="{'invisible': [('account_move_id', '!=', False)]}" 
                             name="action_golf_card_invoice" 
                             icon="fa-file" 
                             context="{'card_id': active_id}">
@@ -91,7 +93,7 @@
                         <label for="player_id" class="oe_edit_only" />
                         <h1>
                             <field name="player_id" class="oe_inline" />
-
+                            
                         </h1>
                     </div>
                     <group>
@@ -102,7 +104,7 @@
                         <group>
                             <field name="tournament_id" />
                             <field name="date" />
-                            <field name="account_move" readonly="1" />
+                            <field name="account_move_id" readonly="1" />
                         </group>
                     </group>
                     <group>

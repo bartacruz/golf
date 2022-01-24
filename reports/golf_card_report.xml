@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="assets_common" name="golf_card_report_assets" inherit_id="web.report_assets_common">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/scss" href="/golf/static/src/css/card.scss"/>
-        </xpath>
-    </template>
     <template id="golf_card_report">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="card">
