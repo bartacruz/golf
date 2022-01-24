@@ -27,7 +27,7 @@ odoo.define('golf.card_widget', function (require) {
             this.fields = {};
             this.rows = [];
             this.isDirty = false
-            console.debug("GolfCardWidget init",this);
+            console.debug("GolfCardWidget initiated",this);
             
         },
         /**

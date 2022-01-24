@@ -123,7 +123,7 @@ class GolfCard(models.Model):
     def action_view_invoice(self):
         action = self.env.ref("account.action_move_out_invoice_type").read()[0]
         action["views"] = [(self.env.ref("account.view_move_form").id, "form")]
-        action["res_id"] = self.account_move.id
+        action["res_id"] = self.account_move_id.id
         return action
 
     def action_golf_card_invoice(self):
