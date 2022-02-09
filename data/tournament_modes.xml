@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="golf_mode_strokes" model="golf.tournament_mode">
+            <field name="name">Strokes</field>
+            <field name="code">STROKES</field>
+            <field name="default">True</field>
+        </record>
+        <record id="golf_mode_gross_strokes" model="golf.tournament_mode">
+            <field name="name">Gross Strokes</field>
+            <field name="code">GROSS_STROKES</field>
+            <field name="default">False</field>
+        </record>
+    </data>
+</odoo>

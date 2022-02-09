@@ -30,7 +30,7 @@ class GolfTournament(models.Model):
         comodel_name='product.template',
         ondelete='restrict',
     )
-    
+    tournament_mode_id = fields.Many2one('golf.tournament_mode', string = _('Mode'))
 
     @api.depends('card_ids')
     def _count_cards(self):
@@ -50,23 +50,25 @@ class GolfTournament(models.Model):
         for tournament in self:
             action = self.env.ref("golf.action_golf_leaderboard_act_window").read()[0]
             action["context"] = {}
-            action["domain"] = ['&',("id", "in", tournament.card_ids.ids),("net_score",">",0)]
+            action["domain"] = ['&',("id", "in", tournament.card_ids.ids),("position","!=",None)]
             return action
 
     
     @api.onchange("card_ids")
     def action_leaderboard(self):
-        cards = list(x for x in self.card_ids if x.net_score > 0)
-        #gross = sorted(cards,key=lambda x: x.net_score, reverse=True)
-        get_net = attrgetter('net_score')
-        res = [list(v) for l,v in groupby(sorted(cards,key = get_net), get_net)]        
-        position = 1
-        for tier in res:
-            tied = len(tier) > 1
-            for card in tier:
-                card.position=position
-                card.position_tied = tied
-                #print(card.player_id.name,card.net_score,card.position,card.position_tied)
-            position +=1
+        print("CALLING COMPUTE")
+        self.tournament_mode_id._process_cards(self)
+        # cards = list(x for x in self.card_ids if x.net_score > 0)
+        # #gross = sorted(cards,key=lambda x: x.net_score, reverse=True)
+        # get_net = attrgetter('net_score')
+        # res = [list(v) for l,v in groupby(sorted(cards,key = get_net), get_net)]        
+        # position = 1
+        # for tier in res:
+        #     tied = len(tier) > 1
+        #     for card in tier:
+        #         card.position=position
+        #         card.position_tied = tied
+        #         #print(card.player_id.name,card.net_score,card.position,card.position_tied)
+        #     position +=1
 
 
