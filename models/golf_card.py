@@ -33,21 +33,11 @@ class GolfCard(models.Model):
     gross_score = fields.Integer(compute='_calculate_score', store=True)
     net_score = fields.Integer(compute='_calculate_score', store=True)
     
-    player_handicap = fields.Integer(
-        string='Handicap', related='player_id.golf_handicap')
+    player_handicap = fields.Integer(string='Handicap')
     
     position = fields.Integer(default=0)
     position_tied = fields.Boolean()
     position_label = fields.Char(compute='_compute_position_label' , store=True)
-    
-    @api.depends('position','position_tied')
-    def _compute_position_label(self):
-        for record in self:
-            if record.position > 0:
-                tied = 'T' if record.position_tied else ''
-                record.position_label = '%s%s' % (tied,record.position, )
-                print(record.name,record.net_score,record.position_label)
-    
 
     account_move_id = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
 
@@ -60,6 +50,14 @@ class GolfCard(models.Model):
         default=lambda self: self._default_stage_id(),
     )
 
+    @api.depends('position','position_tied')
+    def _compute_position_label(self):
+        for record in self:
+            if record.position > 0:
+                tied = 'T' if record.position_tied else ''
+                record.position_label = '%s%s' % (tied,record.position, )
+                print(record.name,record.net_score,record.position_label)
+    
     def _default_stage_id(self):
         stage_ids = self.env["golf.cardstage"].search(
             [("is_default", "=", True),],
@@ -93,13 +91,20 @@ class GolfCard(models.Model):
             if len(stage):
                 self.stage_id=stage[0]
 
+    @api.onchange('player_id')
+    def _set_handicap(self):
+        for record in self:
+            if not record.player_id:
+                return
+            record.player_handicap = record.player_id.golf_handicap
+    
     @api.depends("score_ids")
     def _calculate_score(self):
         for rec in self:
             net = rec.net_score # save it to detect changes
             rec.gross_score = sum(c.score for c in rec.score_ids)
             if rec.gross_score > 0:
-                rec.net_score = rec.gross_score - rec.player_id.golf_handicap
+                rec.net_score = rec.gross_score - rec.player_handicap
             else:
                 rec.net_score = 0
 
