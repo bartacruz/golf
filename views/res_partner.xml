@@ -18,8 +18,11 @@
                     <group>
                         <field name="golf_player" />
                         <field name="golf_license" />
-                        <field name="golf_handicap" />
                         <field name="golf_membership" />
+                    </group>
+                    <group>
+                        <field name="golf_handicap" />
+                        <field name="golf_handicap_index" />
                     </group>
                 </group>
             </page>
@@ -34,6 +37,15 @@
 
     <field name="state">code</field>
     <field name="code">action = records.action_golf_membership_invoice()</field>
+</record>
+<record id="golf_update_handicap_action" model="ir.actions.server">
+    <field name="name">Update handicap from AAG</field>
+    <field name="binding_model_id" ref="base.model_res_partner"/>
+    <field name="binding_view_types">list,form</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+
+    <field name="state">code</field>
+    <field name="code">action = records.action_update_handicap()</field>
 </record>
 
 </odoo>

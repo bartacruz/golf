@@ -1,16 +1,22 @@
 from odoo import _,fields, models, api
 import datetime
 import uuid
+from . import aag_api
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
     golf_player = fields.Boolean("Is a golf player")
     golf_license = fields.Integer(
-        string='golf license',
+        string=_('Golf license'),
     )
     golf_handicap = fields.Integer(
-        string='handicap',
+        string=_('Handicap'),
+    )
+    
+    golf_handicap_index = fields.Float(
+        string=_("Handicap Index"),
+        digits=(4,2),
     )
     golf_card_ids = fields.One2many(
         'golf.card',
@@ -53,7 +59,14 @@ class ResPartner(models.Model):
             action["domain"] = [("id", "in", rec.golf_card_ids.ids)]
             return action
 
-    
+    def action_update_handicap(self):
+        for record in self:
+            if record.golf_license:
+                # get data from AAG
+                data = aag_api.get_enrolled(record.golf_license)
+                record.golf_handicap_index = data.get('HandicapIndex')
+                record.golf_handicap = aag_api.get_handicap(record.golf_handicap_index)
+                
     def action_golf_membership_invoice(self):
         """ Generates golf membership invoices for selected records"""
         ref = str(uuid.uuid4())[:8]
