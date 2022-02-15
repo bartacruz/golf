@@ -23,6 +23,12 @@
         <field name="arch" type="xml">
             <tree string="model_tree" create="true" delete="true" edit="true">
                 <field name="name" />
+                <field name="tee_color" />
+                <field name="par" />
+                <field name="length" />
+                <field name="course_rating_total" />
+                <field name="slope_rating_total" />
+                
             </tree>
         </field>
     </record>
@@ -42,9 +48,21 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="par" />
-                        <field name="length_blue" />
-                        <field name="length_white" />
+                        <group>
+                            <field name="tee_color" />
+                            <field name="par" />
+                            <field name="external_reference" />
+                            <field name="length" />
+                        </group>
+                        <group>
+                            <field name="course_rating_front" />
+                            <field name="course_rating_back" />
+                            <field name="course_rating_total" />
+                            <field name="slope_rating_front" />
+                            <field name="slope_rating_back" />
+                            <field name="slope_rating_total" />
+
+                        </group>
                     </group>
                     <group>
                         <field name="hole_ids" widget="one2many_list">
@@ -53,8 +71,7 @@
                                 <field name="number" />
                                 <field name="par" />
                                 <field name="handicap" />
-                                <field name="length_white" />
-                                <field name="length_blue" />
+                                <field name="length" />
                             </tree>
                         </field>
                     </group>

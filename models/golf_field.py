@@ -13,16 +13,23 @@ class GolfField(models.Model):
         default=lambda self: _('New'),
         copy=False
     )
+    
+    external_reference = fields.Char(string = "External reference") # AAG ID
+    tee_color = fields.Char(string=_("Tee color"))
+    slope_rating_front = fields.Float(string=_("Slope Rating Front"),digits=(4,2))
+    slope_rating_back = fields.Float(string=_("Slope Rating Back"),digits=(4,2))
+    slope_rating_total = fields.Float(string=_("Slope Rating Total"),digits=(4,2))
 
+    course_rating_front = fields.Float(string=_("Course Rating Front"),digits=(4,2))
+    course_rating_back = fields.Float(string=_("Course Rating Back"),digits=(4,2))
+    course_rating_total = fields.Float(string=_("Course Rating Total"),digits=(4,2))
+    
     hole_ids = fields.One2many("golf.hole",'field_id', 'Holes')
     par = fields.Integer()
-    length_blue = fields.Integer()
-    length_white = fields.Integer()
+    length = fields.Integer()
 
     @api.onchange("hole_ids")
     def _calculate_data(self):
         self.par = sum(c.par for c in self.hole_ids)
-        self.length_blue = sum(c.length_blue for c in self.hole_ids)
-        self.length_white = sum(c.length_white for c in self.hole_ids)
-
+        self.length = sum(c.length for c in self.hole_ids)
     

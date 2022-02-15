@@ -127,6 +127,10 @@ odoo.define('golf.card_widget', function (require) {
             console.debug("_renderTable",this,scores);
             this.rows=[];
             this.fields = {};
+            //const front = this.record.data.score_ids.data.fiter( s => s.number < 10);
+            //const back = this.record.data.score_ids.data.fiter( s => s.number > 9);
+            
+
             _.each(this.record.data.score_ids.data,function (score,index) {
                 var field = self._get_golf_field(score.data.field_name);
                 //field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(score.data.hole_id.data.display_name))

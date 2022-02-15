@@ -21,15 +21,10 @@ class GolfHole(models.Model):
     
     field_id = fields.Many2one('golf.field', string='Field', required=True, ondelete='cascade', index=True, copy=False)
 
-    
-    
-    length_blue = fields.Integer(
-        string='length_blue',
+    length = fields.Integer(
+        string=_('Length'),
     )
 
-    length_white = fields.Integer(
-        string='length_white',
-    )
     
     @api.model
     def create(self, vals):

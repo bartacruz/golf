@@ -12,5 +12,10 @@
             <field name="code">GROSS_STROKES</field>
             <field name="default">False</field>
         </record>
+        <record id="golf_mode_choice" model="golf.tournament_mode">
+            <field name="name">Choice</field>
+            <field name="code">CHOICE</field>
+            <field name="default">False</field>
+        </record>
     </data>
 </odoo>

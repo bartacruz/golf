@@ -44,6 +44,10 @@
         <field name="active" eval="True" />
         <field name="arch" type="xml">
             <tree string="model_tree" create="true" delete="true" edit="false" default_order="net_score, gross_score,player_id">
+                <header>
+                    <button name="action_print_leaderboard" type="object" context="{'fulano':'the_tal'}"
+                            string="IMprimir"/>
+                </header>
                 <field name="position_label" string="Pos"/>
                 <field name="player_id" widget="many2one_avatar"/>
                 <field name="gross_score" />

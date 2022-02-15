@@ -1,3 +1,4 @@
+import math
 from odoo import models, fields, _, api
 from odoo.exceptions import ValidationError
 import pytz
@@ -32,14 +33,15 @@ class GolfCard(models.Model):
 
     gross_score = fields.Integer(compute='_calculate_score', store=True)
     net_score = fields.Integer(compute='_calculate_score', store=True)
-    
+
     player_handicap = fields.Integer(string='Handicap')
-    
+
     position = fields.Integer(default=0)
     position_tied = fields.Boolean()
-    position_label = fields.Char(compute='_compute_position_label' , store=True)
+    position_label = fields.Char(compute='_compute_position_label', store=True)
 
-    account_move_id = fields.Many2one('account.move', string='Invoice', readonly=True, copy=False)
+    account_move_id = fields.Many2one(
+        'account.move', string='Invoice', readonly=True, copy=False)
 
     stage_id = fields.Many2one(
         "golf.cardstage",
@@ -50,17 +52,19 @@ class GolfCard(models.Model):
         default=lambda self: self._default_stage_id(),
     )
 
-    @api.depends('position','position_tied')
+    @api.depends('position', 'position_tied')
     def _compute_position_label(self):
         for record in self:
             if record.position > 0:
                 tied = 'T' if record.position_tied else ''
-                record.position_label = '%s%s' % (tied,record.position, )
-                print(record.name,record.net_score,record.position_label)
-    
+                record.position_label = '%s%s' % (tied, record.position, )
+                print(record.name, record.net_score, record.position_label)
+            else:
+                record.position_label = None
+
     def _default_stage_id(self):
         stage_ids = self.env["golf.cardstage"].search(
-            [("is_default", "=", True),],
+            [("is_default", "=", True), ],
             order="sequence asc",
             limit=1,
         )
@@ -78,30 +82,51 @@ class GolfCard(models.Model):
         if tournament_ids:
             return tournament_ids[0]
         else:
-            raise ValidationError(_("You must create an golf field first."))
+            raise ValidationError(
+                _("You must create an golf tournament first."))
 
     @api.onchange('account_move_id')
     def check_stage(self):
-        print("check_stage",self.stage_id.is_closed,self.account_move_id)
+        print("check_stage", self.stage_id.is_closed, self.account_move_id)
         if not self.stage_id.is_closed and self.account_move_id:
             stage = self.env["golf.cardstage"].search(
-            [("name", "=", 'Active'),],
-            limit=1,)
-            print("stage:",stage)
+                [("name", "=", 'Active'), ],
+                limit=1,)
+            print("stage:", stage)
             if len(stage):
-                self.stage_id=stage[0]
+                self.stage_id = stage[0]
+
+    def _calculate_handicap(self,field, player):
+        print(player.golf_handicap_index, field.slope_rating_total,
+              field.course_rating_total, field.par)
+        handicap = round(
+            player.golf_handicap_index * (field.slope_rating_total/113)
+            + (field.course_rating_total-field.par)
+        )
+        if len(field.hole_ids) == 9:
+            higher = field.hole_ids.search_count([('handicap', '=', 1)])
+            print('higher', higher,handicap)
+            if higher:
+                handicap = math.ceil(handicap/2)
+            else:
+                handicap = math.floor(handicap/2)
+        return handicap
 
     @api.onchange('player_id')
     def _set_handicap(self):
         for record in self:
             if not record.player_id:
                 return
-            record.player_handicap = record.player_id.golf_handicap
-    
+            field = record.tournament_id.field_id
+            player = record.player_id
+
+            record.player_handicap = record._calculate_handicap(field,player)
+            print('Player handicap', record.player_handicap)
+
     @api.depends("score_ids")
     def _calculate_score(self):
         for rec in self:
-            net = rec.net_score # save it to detect changes
+            net = rec.net_score  # save it to detect changes
             rec.gross_score = sum(c.score for c in rec.score_ids)
             if rec.gross_score > 0:
                 rec.net_score = rec.gross_score - rec.player_handicap
@@ -138,10 +163,12 @@ class GolfCard(models.Model):
 
         # TODO: use categories for products
         product = self.tournament_id.default_product_id
-        player = self.player_id 
+        player = self.player_id
         if player.property_product_pricelist:
-            price = player.property_product_pricelist.get_product_price(product,1,player)
-            name = '%s - %s' % (product.display_name,player.property_product_pricelist.name,)
+            price = player.property_product_pricelist.get_product_price(
+                product, 1, player)
+            name = '%s - %s' % (product.display_name,
+                                player.property_product_pricelist.name,)
         else:
             price = product.list_price
             name = product.name
@@ -152,11 +179,12 @@ class GolfCard(models.Model):
             'name': name,
             'tax_ids': [(6, 0, product.taxes_id.ids)],
         }
-        narration = '%s - %s' % (product.display_name, self.tournament_id.name,)
+        narration = '%s - %s' % (product.display_name,
+                                 self.tournament_id.name,)
         move_vals = {
             'payment_reference': self.name,
             'invoice_origin': self.tournament_id.name,
-            'state' : 'draft',
+            'state': 'draft',
             'move_type': 'out_invoice',
             'ref': self.name,
             'partner_id': player.id,
@@ -164,11 +192,11 @@ class GolfCard(models.Model):
             'invoice_user_id': self.env.context.get('user_id', self.env.user.id),
             'invoice_date': self.date,
             'invoice_line_ids': [(0, None, invoice_line)],
-            
+
         }
 
         new_move = self.env['account.move'].sudo().with_context(
-                    default_move_type=move_vals['move_type']).create(move_vals)
+            default_move_type=move_vals['move_type']).create(move_vals)
         self.write({'account_move_id': new_move.id})
         self.check_stage()
         return {
@@ -221,6 +249,7 @@ class GolfScore(models.Model):
     def get_field_name(self):
         return self.hole_id.field_id.name
 
+
 class GolfCardStage(models.Model):
     _name = "golf.cardstage"
     _description = "Golf Card Stage"
@@ -233,12 +262,13 @@ class GolfCardStage(models.Model):
     is_closed = fields.Boolean(
         "Is a close stage", help="Services in this stage are considered " "as closed."
     )
-    is_default = fields.Boolean("Is a default stage", help="Used a default stage")
+    is_default = fields.Boolean(
+        "Is a default stage", help="Used a default stage")
     custom_color = fields.Char(
         "Color Code", default="#FFFFFF", help="Use Hex Code only Ex:-#FFFFFF"
     )
     description = fields.Text(translate=True)
-    
+
     @api.constrains("custom_color")
     def _check_custom_color_hex_code(self):
         if (
@@ -246,4 +276,5 @@ class GolfCardStage(models.Model):
             and not self.custom_color.startswith("#")
             or len(self.custom_color) != 7
         ):
-            raise ValidationError(_("Color code should be Hex Code. Ex:-#FFFFFF"))
+            raise ValidationError(
+                _("Color code should be Hex Code. Ex:-#FFFFFF"))
