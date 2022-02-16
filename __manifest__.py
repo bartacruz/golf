@@ -12,7 +12,7 @@
     'website': "http://www.bartatech.com",
 
     'category': 'Sports',
-    'version': '15.0.0.1.8',
+    'version': '15.0.0.1.9',
 
     # any module necessary for this one to work correctly
     'depends': ['base','website','mail','account'],
@@ -28,6 +28,7 @@
         'views/golf_cardstage.xml',
         'views/res_partner.xml',
         'views/menu.xml',
+        'views/website_golf.xml',
         'reports/golf_card_report.xml',
         'data/tournament_modes.xml',
     ],
@@ -39,11 +40,13 @@
     'assets': {
         'web.assets_backend': [
             'golf/static/src/js/golf_card_widget.js',
-            'golf/static/src/js/golf.js',
             'golf/static/src/css/golf.scss',
         ],
         'web.report_assets_common': [
             'golf/static/src/css/card.scss',
+        ],
+        'web.assets_frontend': [
+            'golf/static/src/css/golf.scss',
         ],
     },
 }

@@ -99,10 +99,14 @@ class GolfCard(models.Model):
     def _calculate_handicap(self,field, player):
         print(player.golf_handicap_index, field.slope_rating_total,
               field.course_rating_total, field.par)
-        handicap = round(
-            player.golf_handicap_index * (field.slope_rating_total/113)
-            + (field.course_rating_total-field.par)
-        )
+        if player.golf_handicap_index > 0:
+            handicap = round(
+                player.golf_handicap_index * (field.slope_rating_total/113)
+                + (field.course_rating_total-field.par)
+            )
+        else:
+            handicap = player.golf_handicap
+        
         if len(field.hole_ids) == 9:
             higher = field.hole_ids.search_count([('handicap', '=', 1)])
             print('higher', higher,handicap)

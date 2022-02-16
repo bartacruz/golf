@@ -58,7 +58,11 @@ class GolfTournament(models.Model):
             action["domain"] = ['&',("id", "in", tournament.card_ids.ids),("position",">",0)]
             return action
 
-    
+    def get_leaderboard(self):
+        self.ensure_one()
+        leaderboard = sorted(self.card_ids.search([('tournament_id','=',self.id),('position','>',0)]),key=lambda x: x.position)
+        return leaderboard
+
     @api.onchange("card_ids")
     def action_leaderboard(self):
         print("CALLING COMPUTE")

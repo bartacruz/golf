@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="tournaments" name="Tournaments">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <section>
+                        <h1 class="text-center">
+                            Tournaments
+                        </h1><h2 class="text-center text-muted">
+                            Select one to see details
+                        </h2>
+                    </section>
+                </div>
+                <div class="container">
+                    <t t-foreach="tournaments" t-as="tournament">
+                        <a t-attf-href="/golf/tournament/#{slug(tournament)}"
+                               t-field="tournament.name"
+                               class="d-block mr-3 text-center"
+                            ></a>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="tournament" name="Tournament">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <section>
+                        <h1 class="text-center" t-field="tournament.name"/>
+                        <h2 class="text-center text-muted" t-field="tournament.date" />
+                    </section>
+                </div>
+                <div class="container">
+                    <t t-foreach="leaderboard" t-as="card">
+                        <div class="row bg-light golf-row">
+                            <div class="col p-2" t-field="card.position_label"/>
+                            <div class="col p-2" />
+                            <img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 o_image_40_cover mr-2"/>
+                            <div class="col-6 p-2" t-field="card.player_id.name"/>
+                            <div class="col p-2" t-field="card.gross_score"/>
+                            <div class="col p-2" t-field="card.player_handicap"/>
+                            <div class="col p-2" t-field="card.net_score"/>
+                        </div>    
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

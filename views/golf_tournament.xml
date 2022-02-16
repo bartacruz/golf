@@ -123,28 +123,4 @@
         <field name="tag">golf.homepage</field>
     </record>
     
-    <record id="paperformat_golf_leaderboard" model="report.paperformat">
-        <field name="name">SPGC Leaderboard Format</field>
-        <field name="default" eval="False" />
-            <field name="format">A4</field>
-            <field name="orientation">Portrait</field>
-            <field name="margin_top">0</field>
-            <field name="margin_bottom">0</field>
-            <field name="margin_left">0</field>
-            <field name="margin_right">0</field>
-            <field name="header_line" eval="False" />
-            <field name="header_spacing">0</field>
-    </record>
-
-    <record id="action_golf_leaderboard_report" model="ir.actions.report">
-        <field name="name">Golf leaderboard</field>
-        <field name="model">golf.leaderboard</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">golf.golf_leaderboard_report</field>
-        <field name="report_file">golf.golf_leaderboard_report</field>
-        <field name="binding_model_id" ref="golf.model_golf_leaderboard"/>
-        <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="golf.paperformat_golf_leaderboard"/>
-    </record>
-
 </odoo>
