@@ -29,12 +29,13 @@ class GolfCard(models.Model):
     marker_id = fields.Many2one('res.partner', string='Marker', domain=[
                                 ("golf_player", "=", True)])
 
-    score_ids = fields.One2many("golf.score", 'card_id', string="scores")
+    score_ids = fields.One2many("golf.score", 'card_id', string=_("Scores"))
 
     gross_score = fields.Integer(compute='_calculate_score', store=True)
     net_score = fields.Integer(compute='_calculate_score', store=True)
 
-    player_handicap = fields.Integer(string='Handicap')
+    player_handicap = fields.Integer(string=_('Handicap'))
+    player_license = fields.Integer(string=_('Golf license'))
 
     position = fields.Integer(default=0)
     position_tied = fields.Boolean()
@@ -125,6 +126,7 @@ class GolfCard(models.Model):
             player = record.player_id
 
             record.player_handicap = record._calculate_handicap(field,player)
+            record.player_license = player.golf_license
             print('Player handicap', record.player_handicap)
 
     @api.depends("score_ids")

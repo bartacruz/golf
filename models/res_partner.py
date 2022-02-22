@@ -37,9 +37,9 @@ class ResPartner(models.Model):
         recs = self.search([('golf_license', operator, name)] + args, limit=limit)
         if not recs.ids:
             return super().name_search(name=name, args=args, operator=operator, limit=limit)
-        return recs.name_get()
+        return recs.name_get_for_search()
     
-    def name_get(self):
+    def name_get_for_search(self):
         res = []
         for partner in self:
             name = partner._get_name()

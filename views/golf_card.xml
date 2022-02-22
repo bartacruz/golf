@@ -21,14 +21,16 @@
         <field name="priority" eval="16" />
         <field name="active" eval="True" />
         <field name="arch" type="xml">
-            <tree string="model_tree" create="true" delete="true" edit="true">
+            <tree string="model_tree" create="true" delete="true" edit="true" default_order="net_score, gross_score,player_id">
                 <field name="player_id" />
+                <field name="player_license" />
                 <field name="date" />
                 <field name="tournament_id" />
                 <field name="stage_id" />
                 
                 <field name="marker_id" />
                 <field name="gross_score" />
+                <field name="player_handicap" />
                 <field name="net_score" />
                 <field name="position_label" />
             </tree>
@@ -98,7 +100,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="name" placeholder="name" />
+                            <field name="player_license" />
+                            <field name="name" placeholder="code" />
                             <field name="marker_id" />
                         </group>
                         <group>
