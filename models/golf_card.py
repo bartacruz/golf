@@ -47,7 +47,6 @@ class GolfCard(models.Model):
     stage_id = fields.Many2one(
         "golf.cardstage",
         string="Stage",
-        tracking=True,
         index=True,
         copy=False,
         default=lambda self: self._default_stage_id(),
@@ -59,7 +58,6 @@ class GolfCard(models.Model):
             if record.position > 0:
                 tied = 'T' if record.position_tied else ''
                 record.position_label = '%s%s' % (tied, record.position, )
-                print(record.name, record.net_score, record.position_label)
             else:
                 record.position_label = None
 
@@ -88,18 +86,14 @@ class GolfCard(models.Model):
 
     @api.onchange('account_move_id')
     def check_stage(self):
-        print("check_stage", self.stage_id.is_closed, self.account_move_id)
         if not self.stage_id.is_closed and self.account_move_id:
             stage = self.env["golf.cardstage"].search(
                 [("name", "=", 'Active'), ],
                 limit=1,)
-            print("stage:", stage)
             if len(stage):
                 self.stage_id = stage[0]
 
     def _calculate_handicap(self,field, player):
-        print(player.golf_handicap_index, field.slope_rating_total,
-              field.course_rating_total, field.par)
         if player.golf_handicap_index > 0:
             handicap = round(
                 player.golf_handicap_index * (field.slope_rating_total/113)
@@ -110,7 +104,6 @@ class GolfCard(models.Model):
         
         if len(field.hole_ids) == 9:
             higher = field.hole_ids.search_count([('handicap', '=', 1)])
-            print('higher', higher,handicap)
             if higher:
                 handicap = math.ceil(handicap/2)
             else:
@@ -127,7 +120,6 @@ class GolfCard(models.Model):
 
             record.player_handicap = record._calculate_handicap(field,player)
             record.player_license = player.golf_license
-            print('Player handicap', record.player_handicap)
 
     @api.depends("score_ids")
     def _calculate_score(self):
@@ -249,7 +241,6 @@ class GolfScore(models.Model):
     @api.depends("hole_id")
     def _set_field_name(self):
         for rec in self:
-            print("set_field_name", rec.hole_id, rec.hole_id.field_id.name)
             rec.field_name = rec.hole_id.field_id.name
 
     def get_field_name(self):

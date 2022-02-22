@@ -13,5 +13,12 @@ class GolfTournamentMode(models.Model):
     def _process_cards(self,tournament):
         return None
 
-
-
+    def _set_positions(self,cards):
+        position = 1
+        for tier in cards:
+            group_count = len(tier)
+            tied = group_count > 1
+            for card in tier:
+                card.position=position
+                card.position_tied = tied
+            position += group_count

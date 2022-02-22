@@ -65,7 +65,6 @@ class GolfTournament(models.Model):
 
     @api.onchange("card_ids")
     def action_leaderboard(self):
-        print("CALLING COMPUTE")
         self.tournament_mode_id._process_cards(self)
 
     
