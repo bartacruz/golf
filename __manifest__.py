@@ -12,7 +12,7 @@
     'website': "http://www.bartatech.com",
 
     'category': 'Sports',
-    'version': '15.0.0.1.9',
+    'version': '15.0.0.1.10',
 
     # any module necessary for this one to work correctly
     'depends': ['base','website','mail','account'],
@@ -36,7 +36,7 @@
     'installable': True,
     'application': True,
     "development_status": "Alpha",
-    'images': ['static/description/golf-icon.png'],
+#    'images': ['static/description/golf-icon.png'],
     'assets': {
         'web.assets_backend': [
             'golf/static/src/js/golf_card_widget.js',
