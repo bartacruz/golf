@@ -94,7 +94,17 @@
                     <div class="oe_title">
                         <label for="player_id" class="oe_edit_only" />
                         <h1>
+    
                             <field name="player_id" class="oe_inline" />
+                            <field name="position" class="oe_inline" invisible="1"/>
+                            <field name="position_label" 
+                                widget="badge" 
+                                readonly = "1"
+                                attrs="{'invisible': [('position', '=', 0)]}" 
+                                decoration-success = "position == 1"
+                                decoration-warning = "position in (2,3,4)" 
+                                decoration-info = "position > 4"
+                            />
                             
                         </h1>
                     </div>
