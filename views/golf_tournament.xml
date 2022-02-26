@@ -64,6 +64,9 @@
                             <field name="tournament_mode_id" options="{'no_create_edit': True}" />
                         </group>
                     </group>
+                    <group>
+                        <field name="notes" placeholder="Notes"/>
+                    </group>
                     <notebook>
                         <page string="Players">
                             <field name="player_ids" widget="many2many">

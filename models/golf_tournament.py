@@ -24,6 +24,8 @@ class GolfTournament(models.Model):
         comodel_name='golf.field',
     )
 
+    notes = fields.Text(_("Notes"))
+
     card_ids = fields.One2many('golf.card','tournament_id',string=_('Cards'))
     card_count = fields.Integer(compute = '_count_cards')
     active_card_count = fields.Integer(compute = '_count_cards')
