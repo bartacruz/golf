@@ -8,18 +8,30 @@
                     <section>
                         <h1 class="text-center">
                             Tournaments
-                        </h1><h2 class="text-center text-muted">
+                        </h1>
+                        <h2 class="text-center text-muted">
                             Select one to see details
                         </h2>
                     </section>
                 </div>
                 <div class="container">
-                    <t t-foreach="tournaments" t-as="tournament">
-                        <a t-attf-href="/golf/tournament/#{slug(tournament)}"
-                               t-field="tournament.name"
-                               class="d-block mr-3 text-center"
-                            ></a>
-                    </t>
+                    <div class="card-group">
+                        <t t-foreach="tournaments" t-as="tournament">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span t-field="tournament.date" />
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title" t-field="tournament.name" />
+                                    <p class="card-text" t-field="tournament.tournament_mode_id.name" />
+                                    <a t-attf-href="/golf/tournament/#{slug(tournament)}" class="btn btn-outline-success">
+                                        <span class="fa fa-trophy"></span>
+                                        Leaderboard
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
                 </div>
             </div>
         </t>
@@ -28,27 +40,99 @@
     <template id="tournament" name="Tournament">
         <t t-call="website.layout">
             <div id="wrap">
-                <div class="oe_structure">
-                    <section>
-                        <h1 class="text-center" t-field="tournament.name"/>
-                        <h2 class="text-center text-muted" t-field="tournament.date" />
-                    </section>
+                <div class="container golf-page bg-light">
+                    <div class="tournament-data m-md-5 align-items-end">
+                        <h1 class="text-center" t-field="tournament.name" />
+                        <h2 class="text-center text-muted">
+                            <span t-field="tournament.date" />
+                            -
+                            <span t-field="tournament.tournament_mode_id.name" />
+                        </h2>
+
+                    </div>
                 </div>
-                <div class="container">
-                    <t t-foreach="leaderboard" t-as="card">
-                        <div class="row bg-light golf-row">
-                            <div class="col p-2" t-field="card.position_label"/>
-                            <div class="col p-2" />
-                            <img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 o_image_40_cover mr-2"/>
-                            <div class="col-6 p-2" t-field="card.player_id.name"/>
-                            <div class="col p-2" t-field="card.gross_score"/>
-                            <div class="col p-2" t-field="card.player_handicap"/>
-                            <div class="col p-2" t-field="card.net_score"/>
-                        </div>    
-                    </t>
+                <div class="container bg-light">
+                    <div class="tournament-leaderboard m-md-5 ">
+                        <div class="row golf-row bg-info ">
+                            <div class="col p-2">Pos</div>
+                            <div class="col p-2"></div>
+                            <div class="col-6 p-2">Player</div>
+                            <div class="col p-2">Gross</div>
+                            <div class="col p-2">Hcp</div>
+                            <div class="col p-2">Net</div>
+                            <div class="col p-2"></div>
+
+                        </div>
+                        <t t-foreach="leaderboard" t-as="card">
+                            <div class="row  golf-row">
+                                <div class="col p-2" t-field="card.position_label" />
+                                <div class="col p-2"><img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 o_image_40_cover mr-2" /></div>
+                                <div class="col-6 p-2" t-field="card.player_id.name" />
+                                <div class="col p-2" t-field="card.gross_score" />
+                                <div class="col p-2" t-field="card.player_handicap" />
+                                <div class="col p-2" t-field="card.net_score" />
+                                <div class="col p-2">
+                                    <a t-attf-href="/golf/card/#{slug(card)}" class="d-block mr-3 text-center">
+                                        <span class="fa fa-search"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
                 </div>
             </div>
         </t>
+    </template>
+    <template id="card" name="Card">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container golf-page bg-light">
+                    <div class="d-flex flex-row m-md-5 align-items-end">
+
+                        <div class="card-data">
+                            <h1>
+                                <span t-field="card.player_id" />
+                                <span class="badge bg-primary" t-field="card.position_label" />
+                            </h1>
+                            <h2 class="text-muted">
+                                <a t-attf-href="/golf/tournament/#{slug(card.tournament_id)}" t-field="card.tournament_id.name" />
+                                -
+                                <span t-field="card.tournament_id.date" />
+                            </h2>
+                        </div>
+                        <img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 rounded mr-2" />
+
+                    </div>
+                </div>
+                <div class="container bg-light">
+                    <div class="golf-card-row d-flex flex-row m-md-5 ">
+                        <div class="golf-score flex-fill">
+                            <div class="p-2 golf-hole bg-dark border border-dark">Hole</div>
+                            <div class="p-2 golf-hole-par bg-info border border-dark">Par</div>
+
+                            <div class="p-2 golf-score border border-dark">Score</div>
+                        </div>
+                        <t t-foreach="card.score_ids" t-as="score">
+                            <div class="golf-score flex-fill">
+                                <div class="p-2 text-center golf-hole bg-dark border border-dark" t-field="score.hole_id.number" />
+                                <div class="p-2 text-center golf-hole-par bg-info border border-dark" t-field="score.hole_id.par" />
+
+                                <div class="p-2 text-center golf-score border border-dark" t-field="score.score" />
+                            </div>
+                        </t>
+                        <div class="golf-score flex-fill">
+                            <div class="p-2 text-center golf-hole bg-dark border border-dark" t-field="score.hole_id.field_id.name" />
+                            <div class="p-2 text-center golf-hole-par bg-info border border-dark" t-field="score.hole_id.field_id.par" />
+
+                            <div class="p-2 text-center golf-score border border-dark" t-field="card.gross_score" />
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </t>
+
     </template>
 
 </odoo>
