@@ -5,6 +5,9 @@ from operator import attrgetter
 class GolfTournament(models.Model):
     _name = 'golf.tournament'
     _description = 'a golf tournament'
+    _inherit = [
+        'website.published.mixin',
+    ]
 
     name = fields.Char(
         string='Name',
@@ -37,6 +40,7 @@ class GolfTournament(models.Model):
         ondelete='restrict',
     )
     tournament_mode_id = fields.Many2one('golf.tournament_mode', string = _('Mode'))
+    
 
     @api.depends('card_ids')
     def _count_cards(self):
@@ -62,7 +66,8 @@ class GolfTournament(models.Model):
 
     def get_leaderboard(self):
         self.ensure_one()
-        leaderboard = sorted(self.card_ids.search([('tournament_id','=',self.id),('position','>',0)]),key=lambda x: x.position)
+        GolfCard = self.env['golf.card']
+        leaderboard = sorted(GolfCard.sudo().search([('tournament_id','=',self.id),('position','>',0)]),key=lambda x: x.position)
         return leaderboard
 
     @api.onchange("card_ids")

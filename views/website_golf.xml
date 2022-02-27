@@ -17,7 +17,7 @@
                 <div class="container">
                     <div class="card-group">
                         <t t-foreach="tournaments" t-as="tournament">
-                            <div class="card">
+                            <div class="card m-1">
                                 <div class="card-header">
                                     <span t-field="tournament.date" />
                                 </div>
@@ -46,7 +46,7 @@
                         <h2 class="text-center text-muted">
                             <span t-field="tournament.date" />
                             -
-                            <span t-field="tournament.tournament_mode_id.name" />
+                            <span t-field="tournament.tournament_mode_id" />
                         </h2>
 
                     </div>
@@ -66,7 +66,9 @@
                         <t t-foreach="leaderboard" t-as="card">
                             <div class="row  golf-row">
                                 <div class="col p-2" t-field="card.position_label" />
-                                <div class="col p-2"><img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 o_image_40_cover mr-2" /></div>
+                                <div class="col p-2">
+                                    <img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 o_image_40_cover mr-2" />
+                                </div>
                                 <div class="col-6 p-2" t-field="card.player_id.name" />
                                 <div class="col p-2" t-field="card.gross_score" />
                                 <div class="col p-2" t-field="card.player_handicap" />
@@ -87,25 +89,36 @@
         <t t-call="website.layout">
             <div id="wrap">
                 <div class="container golf-page bg-light">
-                    <div class="d-flex flex-row m-md-5 align-items-end">
+                    <h4 class="text-center mt-2">
+                        <a t-attf-href="/golf/tournament/#{slug(card.tournament_id)}" t-field="card.tournament_id.name" />
+                        <span class="badge bg-info">
+                            <span class="fa fa-calendar"></span>
+                            <span t-field="card.tournament_id.date" />
+                        </span>
+                    </h4>
+
+                    <div class="d-flex flex-row m-1 mx-md-5 align-items-end">
 
                         <div class="card-data">
                             <h1>
-                                <span t-field="card.player_id" />
+                                <a t-attf-href="/golf/player/#{slug(card.player_id)}" t-field="card.player_id" />
                                 <span class="badge bg-primary" t-field="card.position_label" />
                             </h1>
-                            <h2 class="text-muted">
-                                <a t-attf-href="/golf/tournament/#{slug(card.tournament_id)}" t-field="card.tournament_id.name" />
-                                -
-                                <span t-field="card.tournament_id.date" />
-                            </h2>
+                            <h4 class="text-muted">
+                                License:
+                                <span t-field="card.player_license" />
+                            </h4>
+                            <h4 class="text-muted">
+                                Handicap:
+                                <span t-field="card.player_handicap" />
+                            </h4>
                         </div>
                         <img t-att-src="image_data_uri(card.player_id.avatar_128)" class="p-2 rounded mr-2" />
 
                     </div>
                 </div>
                 <div class="container bg-light">
-                    <div class="golf-card-row d-flex flex-row m-md-5 ">
+                    <div class="golf-card-row d-flex flex-row m-1 mx-md-5 ">
                         <div class="golf-score flex-fill">
                             <div class="p-2 golf-hole bg-dark border border-dark">Hole</div>
                             <div class="p-2 golf-hole-par bg-info border border-dark">Par</div>
@@ -134,5 +147,74 @@
         </t>
 
     </template>
+
+    <template id="player" name="Player">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container golf-page">
+                    <div class="d-flex flex-row m-1 mx-md-5 align-items-end">
+                        <div class="player-data">
+                            <h1 t-field="player.name" />
+                            <h4 class="text-muted">
+                                License:
+                                <span t-field="player.golf_license" />
+                            </h4>
+                            <h4 class="text-muted">
+                                Handicap:
+                                <span t-field="player.golf_handicap" />
+                            </h4>
+                        </div>
+                        <img t-att-src="image_data_uri(player.avatar_128)" class="p-2 rounded mr-2" />
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="portal_my_home_golfcards" name="Show Golf Cards" inherit_id="portal.portal_my_home" customize_show="True" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Golf Cards</t>
+                <t t-set="url" t-value="'/my/golfcards'" />
+                <t t-set="placeholder_count" t-value="'golfcards_count'" />
+            </t>
+        </xpath>
+    </template>
+    <template id="portal_my_golfcards" name="My Golf Cards">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Golf Cards</t>
+            </t>
+            <t t-if="not cards">
+                <p>There are currently no golf cards for your account.</p>
+            </t>
+            <t t-if="cards" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Date</th>
+                        <th>Tournament</th>
+                        <th>Gross</th>
+                        <th>Handicap</th>
+                        <th>Net</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="cards" t-as="card">
+                        <tr>
+                            <td><span t-field="card.date"/></td>
+                            <td><span t-field="card.tournament_id"/></td>
+                            <td><span t-field="card.gross_score"/></td>
+                            <td><span t-field="card.player_handicap"/></td>
+                            <td><span t-field="card.net_score"/></td>
+                            <td><span t-field="card.position_label"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
 
 </odoo>

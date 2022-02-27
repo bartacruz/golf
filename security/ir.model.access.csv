@@ -6,3 +6,4 @@ access_golf_card_user,golf.card.user,model_golf_card,base.group_user,1,1,1,1
 access_golf_tournament_user,golf.tournament.user,model_golf_tournament,base.group_user,1,1,1,1
 access_golf_cardstage_user,golf.cardstage.user,model_golf_cardstage,base.group_user,1,1,1,1
 access_golf_tournament_mode_user,golf.tournament_mode.user,model_golf_tournament_mode,base.group_user,1,1,1,1
+access_golf_card_user_portal,golf.card.user,model_golf_card,base.group_portal,1,0,0,0

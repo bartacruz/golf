@@ -38,6 +38,8 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <field name="website_url" invisible="1"/>
+                        <field name="is_published" widget="website_redirect_button"/>
                         <field name="active_card_count" invisible="1"/>
                         <button class="oe_stat_button" type="action" name="%(action_golf_cards_related)d" icon="fa-id-card">
                             <field string="Cards" name="card_count" widget="statinfo" />
@@ -56,6 +58,7 @@
                         <group id="main-left">
                             <field name="date" />
                             <field name="default_product_id" />
+                            <field name="website_published" />
                         </group>
                         <group id="main-right">
                             <field name="field_id" options="{'no_create_edit': True}">

@@ -12,7 +12,7 @@
     'website': "http://www.bartatech.com",
 
     'category': 'Sports',
-    'version': '15.0.0.1.10',
+    'version': '15.0.0.1.11',
 
     # any module necessary for this one to work correctly
     'depends': ['base','website','mail','account'],
@@ -20,6 +20,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'security/website_golf_security.xml',
         'data/ir_sequence.xml',
         'views/golf_field.xml',
         'views/golf_card.xml',
