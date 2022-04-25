@@ -20,7 +20,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'security/website_golf_security.xml',
+        #'security/website_golf_security.xml',
         'data/ir_sequence.xml',
         'views/golf_field.xml',
         'views/golf_card.xml',
