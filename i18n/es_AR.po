@@ -4,16 +4,23 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 16:36+0000\n"
-"PO-Revision-Date: 2021-12-14 16:36+0000\n"
+"POT-Creation-Date: 2022-04-25 16:29+0000\n"
+"PO-Revision-Date: 2022-04-25 16:29+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.tournaments
+msgid ""
+"<span class=\"fa fa-trophy\"/>\n"
+"                                        Leaderboard"
+msgstr "<span class=\"fa fa-trophy\"/>Leaderboard"
 
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_card_form
@@ -26,6 +33,21 @@ msgid "<span class=\"o_span_text\">Invoice</span>"
 msgstr "<span class=\"o_span_text\">Factura</span>"
 
 #. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
+msgid "<span class=\"o_stat_text\">Leaderboard</span>"
+msgstr "<span class=\"o_stat_text\">Posiciones</span>"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__active_card_count
+msgid "Active Card Count"
+msgstr "Tarjetas Activas"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__can_publish
+msgid "Can Publish"
+msgstr ""
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_score__card_id
 msgid "Card"
 msgstr "Tarjeta"
@@ -34,6 +56,16 @@ msgstr "Tarjeta"
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__card_count
 msgid "Card Count"
 msgstr "Tarjetas"
+
+#. module: golf
+#: model:ir.ui.menu,name:golf.menu_golf_cardstage
+msgid "Card Stages"
+msgstr ""
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_card_search
+msgid "Card search"
+msgstr "Buscar tarjeta"
 
 #. module: golf
 #: code:addons/golf/models/golf_tournament.py:0
@@ -50,13 +82,30 @@ msgstr "Tarjetas"
 
 #. module: golf
 #: model_terms:ir.actions.act_window,help:golf.action_golf_card_act_window
+#: model_terms:ir.actions.act_window,help:golf.action_golf_cards_related
 msgid "Click to add new golf card"
-msgstr ""
+msgstr "Click para agregar una nueva tarjeta"
 
 #. module: golf
 #: model_terms:ir.actions.act_window,help:golf.action_golf_field_act_window
 #: model_terms:ir.actions.act_window,help:golf.action_golf_tournament_act_window
 msgid "Click to add new golf field"
+msgstr "Click para agregar un nuevo campo"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__code
+msgid "Code"
+msgstr "Código"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__custom_color
+msgid "Color Code"
+msgstr ""
+
+#. module: golf
+#: code:addons/golf/models/golf_card.py:0
+#, python-format
+msgid "Color code should be Hex Code. Ex:-#FFFFFF"
 msgstr ""
 
 #. module: golf
@@ -65,20 +114,50 @@ msgid "Contact"
 msgstr "Contacto"
 
 #. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__course_rating_back
+#, python-format
+msgid "Course Rating Back"
+msgstr "Calificación Vuelta"
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__course_rating_front
+#, python-format
+msgid "Course Rating Front"
+msgstr "Calificación Ida"
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__course_rating_total
+#, python-format
+msgid "Course Rating Total"
+msgstr "Calificación Total"
+
+#. module: golf
+#: model_terms:ir.actions.act_window,help:golf.action_golf_cardstage_act_window
+msgid "Create a Stage."
+msgstr "Crear una etapa"
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__create_uid
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__create_uid
 #: model:ir.model.fields,field_description:golf.field_golf_field__create_uid
 #: model:ir.model.fields,field_description:golf.field_golf_hole__create_uid
 #: model:ir.model.fields,field_description:golf.field_golf_score__create_uid
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__create_uid
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__create_date
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__create_date
 #: model:ir.model.fields,field_description:golf.field_golf_field__create_date
 #: model:ir.model.fields,field_description:golf.field_golf_hole__create_date
 #: model:ir.model.fields,field_description:golf.field_golf_score__create_date
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__create_date
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -96,9 +175,16 @@ msgstr "Datos"
 #. module: golf
 #: code:addons/golf/models/golf_tournament.py:0
 #: model:ir.model.fields,field_description:golf.field_golf_card__date
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__date
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
 #, python-format
 msgid "Date"
 msgstr "Fecha"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__default
+msgid "Default"
+msgstr ""
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__default_product_id
@@ -106,22 +192,31 @@ msgid "Default Product"
 msgstr "Producto Default"
 
 #. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__display_name
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__display_name
 #: model:ir.model.fields,field_description:golf.field_golf_field__display_name
 #: model:ir.model.fields,field_description:golf.field_golf_hole__display_name
 #: model:ir.model.fields,field_description:golf.field_golf_score__display_name
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__display_name
-#: model:ir.model.fields,field_description:golf.field_res_partner__display_name
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_tournament__date
-msgid "Fecha"
-msgstr ""
+#: model:ir.model.fields,field_description:golf.field_golf_field__external_reference
+msgid "External reference"
+msgstr "Referencia Externa"
 
 #. module: golf
+#: code:addons/golf/models/golf_tournament.py:0
 #: model:ir.model.fields,field_description:golf.field_golf_hole__field_id
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__field_id
+#, python-format
 msgid "Field"
 msgstr "Campo"
 
@@ -139,6 +234,11 @@ msgid "Fields"
 msgstr "Campos"
 
 #. module: golf
+#: model:ir.actions.server,name:golf.golf_membership_invoice_action
+msgid "Generate Membership Invoice"
+msgstr "Generar facturas de membresías"
+
+#. module: golf
 #: model:ir.ui.menu,name:golf.menu_golf
 #: model_terms:ir.ui.view,arch_db:golf.golf_partner_fields
 msgid "Golf"
@@ -147,7 +247,7 @@ msgstr ""
 #. module: golf
 #. openerp-web
 #: code:addons/golf/static/src/xml/golf_card.xml:0
-#: model:ir.actions.act_window,name:golf.action_golf_card_act_window
+#: model:ir.actions.report,name:golf.action_golf_card_report
 #, python-format
 msgid "Golf Card"
 msgstr "Tarjeta"
@@ -159,9 +259,47 @@ msgid "Golf Card Count"
 msgstr "Tarjetas"
 
 #. module: golf
+#: model:ir.model,name:golf.model_golf_cardstage
+msgid "Golf Card Stage"
+msgstr "Etapa de la tarjeta"
+
+#. module: golf
+#: model:ir.actions.act_window,name:golf.action_golf_card_act_window
+msgid "Golf Cardo"
+msgstr "Tarjeta"
+
+#. module: golf
+#: model:ir.actions.act_window,name:golf.action_golf_cards_related
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_home_golfcards
+msgid "Golf Cards"
+msgstr "Tarjetas"
+
+#. module: golf
+#: model:ir.actions.client,name:golf.action_golf_home_page
+msgid "Golf Home"
+msgstr "Inicio"
+
+#. module: golf
+#: code:addons/golf/models/res_partner.py:0
+#, python-format
+msgid "Golf Memberships %s"
+msgstr "Membresía Golf %s"
+
+#. module: golf
 #: model:ir.actions.act_window,name:golf.action_golf_field_act_window
 msgid "Golf field"
 msgstr "Campo"
+
+#. module: golf
+#: code:addons/golf/models/golf_card.py:0
+#: code:addons/golf/models/res_partner.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_card__player_license
+#: model:ir.model.fields,field_description:golf.field_res_partner__golf_license
+#: model:ir.model.fields,field_description:golf.field_res_users__golf_license
+#, python-format
+msgid "Golf license"
+msgstr "Matrícula"
 
 #. module: golf
 #: model:ir.model,name:golf.model_golf_hole
@@ -169,19 +307,51 @@ msgid "GolfHole"
 msgstr "Hoyo"
 
 #. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+#: model_terms:ir.ui.view,arch_db:golf.tournament
+msgid "Gross"
+msgstr ""
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__gross_score
 msgid "Gross Score"
 msgstr "Gross"
 
 #. module: golf
+#: code:addons/golf/models/golf_card.py:0
+#: code:addons/golf/models/res_partner.py:0
 #: model:ir.model.fields,field_description:golf.field_golf_card__player_handicap
 #: model:ir.model.fields,field_description:golf.field_golf_hole__handicap
+#: model:ir.model.fields,field_description:golf.field_res_partner__golf_handicap
+#: model:ir.model.fields,field_description:golf.field_res_users__golf_handicap
 #: model_terms:ir.ui.view,arch_db:golf.golf_player_view_kanban
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+#, python-format
 msgid "Handicap"
-msgstr "Handicap"
+msgstr ""
+
+#. module: golf
+#: code:addons/golf/models/res_partner.py:0
+#: model:ir.model.fields,field_description:golf.field_res_partner__golf_handicap_index
+#: model:ir.model.fields,field_description:golf.field_res_users__golf_handicap_index
+#, python-format
+msgid "Handicap Index"
+msgstr ""
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.card
+#: model_terms:ir.ui.view,arch_db:golf.player
+msgid "Handicap:"
+msgstr ""
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.tournament
+msgid "Hcp"
+msgstr ""
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_score__hole_id
+#: model_terms:ir.ui.view,arch_db:golf.card
 msgid "Hole"
 msgstr "Hoyo"
 
@@ -192,18 +362,34 @@ msgstr "Hoyos"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__id
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__id
 #: model:ir.model.fields,field_description:golf.field_golf_field__id
 #: model:ir.model.fields,field_description:golf.field_golf_hole__id
 #: model:ir.model.fields,field_description:golf.field_golf_score__id
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__id
-#: model:ir.model.fields,field_description:golf.field_res_partner__id
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__id
 msgid "ID"
 msgstr ""
 
 #. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_card__account_move
+#: model:ir.model.fields,field_description:golf.field_golf_card__account_move_id
 msgid "Invoice"
 msgstr "Factura"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__is_published
+msgid "Is Published"
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__is_closed
+msgid "Is a close stage"
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__is_default
+msgid "Is a default stage"
+msgstr ""
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_res_partner__golf_player
@@ -213,47 +399,55 @@ msgstr "es un Jugador"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card____last_update
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage____last_update
 #: model:ir.model.fields,field_description:golf.field_golf_field____last_update
 #: model:ir.model.fields,field_description:golf.field_golf_hole____last_update
 #: model:ir.model.fields,field_description:golf.field_golf_score____last_update
 #: model:ir.model.fields,field_description:golf.field_golf_tournament____last_update
-#: model:ir.model.fields,field_description:golf.field_res_partner____last_update
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__write_uid
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__write_uid
 #: model:ir.model.fields,field_description:golf.field_golf_field__write_uid
 #: model:ir.model.fields,field_description:golf.field_golf_hole__write_uid
 #: model:ir.model.fields,field_description:golf.field_golf_score__write_uid
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__write_uid
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__write_uid
 msgid "Last Updated by"
 msgstr "Ultima actualizacion por"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__write_date
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__write_date
 #: model:ir.model.fields,field_description:golf.field_golf_field__write_date
 #: model:ir.model.fields,field_description:golf.field_golf_hole__write_date
 #: model:ir.model.fields,field_description:golf.field_golf_score__write_date
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__write_date
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__write_date
 msgid "Last Updated on"
 msgstr "Ultima actualizacion el"
 
 #. module: golf
 #: model:ir.actions.act_window,name:golf.action_golf_leaderboard_act_window
-#: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
 msgid "Leaderboard"
 msgstr "Tablero"
 
 #. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_field__length_blue
-msgid "Length Blue"
-msgstr "Largo Azules"
+#: code:addons/golf/models/golf_hole.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__length
+#: model:ir.model.fields,field_description:golf.field_golf_hole__length
+#, python-format
+msgid "Length"
+msgstr "Distancia"
 
 #. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_field__length_white
-msgid "Length White"
-msgstr "Largo Blancas"
+#: model_terms:ir.ui.view,arch_db:golf.card
+#: model_terms:ir.ui.view,arch_db:golf.player
+msgid "License:"
+msgstr "Matrícula"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__marker_id
@@ -267,13 +461,28 @@ msgid "Membership"
 msgstr "Membresía"
 
 #. module: golf
+#: code:addons/golf/models/golf_tournament.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__tournament_mode_id
+#, python-format
+msgid "Mode"
+msgstr "Modo"
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__name
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__name
 #: model:ir.model.fields,field_description:golf.field_golf_field__name
 #: model:ir.model.fields,field_description:golf.field_golf_hole__name
 #: model:ir.model.fields,field_description:golf.field_golf_score__name
 #: model:ir.model.fields,field_description:golf.field_golf_tournament__name
+#: model:ir.model.fields,field_description:golf.field_golf_tournament_mode__name
 msgid "Name"
 msgstr "Nombre"
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+#: model_terms:ir.ui.view,arch_db:golf.tournament
+msgid "Net"
+msgstr "Neto"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__net_score
@@ -299,55 +508,213 @@ msgid "New"
 msgstr "Nuevo"
 
 #. module: golf
+#: code:addons/golf/models/golf_tournament.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__notes
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
+#, python-format
+msgid "Notes"
+msgstr "Notas"
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_hole__number
 msgid "Number"
-msgstr "Numero"
+msgstr "Número"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_field__par
 #: model:ir.model.fields,field_description:golf.field_golf_hole__par
+#: model_terms:ir.ui.view,arch_db:golf.card
 msgid "Par"
-msgstr "Par"
+msgstr ""
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__player_id
+#: model_terms:ir.ui.view,arch_db:golf.tournament
 msgid "Player"
 msgstr "Jugador"
 
 #. module: golf
 #: model:ir.actions.act_window,name:golf.action_golf_player_act_window
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__player_ids
 #: model:ir.ui.menu,name:golf.menu_golf_players
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
 msgid "Players"
 msgstr "Jugadores"
 
 #. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.tournament
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_card_leaderboard
+msgid "Pos"
+msgstr "Pos"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_card__position
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+msgid "Position"
+msgstr "Posición"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_card__position_label
+msgid "Position Label"
+msgstr "Etiqueta"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_card__position_tied
+msgid "Position Tied"
+msgstr "Empatado"
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_score__score
+#: model_terms:ir.ui.view,arch_db:golf.card
 msgid "Score"
+msgstr "Puntaje"
+
+#. module: golf
+#: code:addons/golf/models/golf_card.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_card__score_ids
+#, python-format
+msgid "Scores"
+msgstr "Puntajes"
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.tournaments
+msgid "Select one to see details"
 msgstr ""
 
 #. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_cardstage__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,help:golf.field_golf_cardstage__is_closed
+msgid "Services in this stage are considered as closed."
+msgstr ""
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__slope_rating_back
+#, python-format
+msgid "Slope Rating Back"
+msgstr "Slope Rating Vuelta"
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__slope_rating_front
+#, python-format
+msgid "Slope Rating Front"
+msgstr "Slope Rating Ida"
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__slope_rating_total
+#, python-format
+msgid "Slope Rating Total"
+msgstr "Slope Rating Total"
+
+#. module: golf
 #: model_terms:ir.actions.act_window,help:golf.action_golf_card_act_window
+#: model_terms:ir.actions.act_window,help:golf.action_golf_cards_related
 #: model_terms:ir.actions.act_window,help:golf.action_golf_field_act_window
 #: model_terms:ir.actions.act_window,help:golf.action_golf_tournament_act_window
 msgid "Something about"
 msgstr "Algo"
 
 #. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_card__stage_id
+#: model_terms:ir.ui.view,arch_db:golf.golf_cardstage_form_view
+msgid "Stage"
+msgstr "Etapa"
+
+#. module: golf
+#: model:ir.actions.act_window,name:golf.action_golf_cardstage_act_window
+#: model_terms:ir.ui.view,arch_db:golf.golf_cardstage_tree_view
+msgid "Stages"
+msgstr "Etapas"
+
+#. module: golf
+#: code:addons/golf/models/golf_field.py:0
+#: model:ir.model.fields,field_description:golf.field_golf_field__tee_color
+#, python-format
+msgid "Tee color"
+msgstr "Color del Tee"
+
+#. module: golf
+#: model:ir.model.fields,help:golf.field_golf_tournament__website_url
+msgid "The full URL to access the document through the website."
+msgstr ""
+
+#. module: golf
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
+msgid "There are currently no golf cards for your account."
+msgstr ""
+
+#. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__tournament_id
+#: model_terms:ir.ui.view,arch_db:golf.portal_my_golfcards
 msgid "Tournament"
 msgstr "Torneo"
 
 #. module: golf
+#: model:ir.model,name:golf.model_golf_tournament_mode
+msgid "Tournament Mode"
+msgstr "Modo"
+
+#. module: golf
+#: code:addons/golf/models/website.py:0
 #: model:ir.actions.act_window,name:golf.action_golf_tournament_act_window
 #: model:ir.ui.menu,name:golf.menu_golf_tournament
+#: model_terms:ir.ui.view,arch_db:golf.tournaments
+#, python-format
 msgid "Tournaments"
 msgstr "Torneos"
 
 #. module: golf
+#: model:ir.actions.server,name:golf.golf_update_handicap_action
+msgid "Update handicap from AAG"
+msgstr "Actualizar handicap desde la AAG"
+
+#. module: golf
+#: model:ir.model.fields,help:golf.field_golf_cardstage__custom_color
+msgid "Use Hex Code only Ex:-#FFFFFF"
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,help:golf.field_golf_cardstage__is_default
+msgid "Used a default stage"
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,help:golf.field_golf_cardstage__sequence
+msgid "Used to order stages. Lower is better."
+msgstr ""
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__website_published
+msgid "Visible on current website"
+msgstr ""
+
+#. module: golf
+#: model:ir.model,name:golf.model_website
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: golf
+#: model:ir.model.fields,field_description:golf.field_golf_tournament__website_url
+msgid "Website URL"
+msgstr ""
+
+#. module: golf
 #: code:addons/golf/models/golf_card.py:0
 #, python-format
-msgid "You must create an golf field first."
-msgstr "Debe crear un jugador primero"
+msgid "You must create an golf stage first."
+msgstr "Debe crear una etapa primero"
+
+#. module: golf
+#: code:addons/golf/models/golf_card.py:0
+#, python-format
+msgid "You must create an golf tournament first."
+msgstr "Debe crear un torneo primero"
 
 #. module: golf
 #: model:ir.model,name:golf.model_golf_card
@@ -370,26 +737,9 @@ msgid "a golf tournament"
 msgstr "un torneo"
 
 #. module: golf
-#: model:ir.model.fields,field_description:golf.field_res_partner__golf_license
-#: model:ir.model.fields,field_description:golf.field_res_users__golf_license
-msgid "golf license"
-msgstr "matrícula"
-
-#. module: golf
-#: model:ir.model.fields,field_description:golf.field_res_partner__golf_handicap
-#: model:ir.model.fields,field_description:golf.field_res_users__golf_handicap
-msgid "handicap"
-msgstr "handicap"
-
-#. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_hole__length_blue
-msgid "length_blue"
-msgstr "largo de azules"
-
-#. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_hole__length_white
-msgid "length_white"
-msgstr "largo de blancas"
+#: model_terms:ir.ui.view,arch_db:golf.view_golf_card_form
+msgid "code"
+msgstr ""
 
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_card_form
@@ -399,7 +749,6 @@ msgid "model_form"
 msgstr ""
 
 #. module: golf
-#: model_terms:ir.ui.view,arch_db:golf.view_golf_card_search
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_field_search
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_search
 msgid "model_search"
@@ -414,13 +763,7 @@ msgid "model_tree"
 msgstr ""
 
 #. module: golf
-#: model_terms:ir.ui.view,arch_db:golf.view_golf_card_form
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_field_form
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
 msgid "name"
-msgstr ""
-
-#. module: golf
-#: model:ir.model.fields,field_description:golf.field_golf_card__score_ids
-msgid "scores"
-msgstr ""
+msgstr "nombre"
