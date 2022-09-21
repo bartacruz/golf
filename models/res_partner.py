@@ -59,13 +59,49 @@ class ResPartner(models.Model):
             action["domain"] = [("id", "in", rec.golf_card_ids.ids)]
             return action
 
+    def create_from_external(self,golf_license):
+        player = aag_api.get_enrolled(golf_license)
+        # {'EnrollmentNumber': '101261', 'Active': True, 'FirstNames': 'JULIO', 'LastNames': 'SANTA CRUZ ', 'HandicapStandard': -99, 'HandicapEven3': -99, 'HandicapIndex': 15.6, 'LowestHandicapIndex': 18.1, 'OptionClubId': 365, 'Category': 0, 'BornDate': '27-8-1971', 'DocNumber': '22278642'}
+        partner = self.search([
+            ('firstname','ilike',player.get('FirstNames')),
+            ('lastname','ilike',player.get('LastNames')),
+        ])
+        if not partner:
+            partner = self.create({
+                'firstname': player.get('FirstNames').title(),
+                'lastname': player.get('LastNames').title(),
+            })
+            print("nuevo jugador",partner.name)
+            
+        partner.golf_license = int(player.get('EnrollmentNumber'))
+        partner.update_from_external(partner)
+    
+        return partner
+            
+            
+    def update_from_external(self,data):
+        self.ensure_one()
+        self.golf_player = True
+        self.golf_handicap_index = data.get('HandicapIndex')
+        self.golf_handicap = aag_api.get_handicap(self.golf_handicap_index)
+        if not self.golf_membership:
+            club = int(self.env['ir.config_parameter'].sudo().get_param('golf.club_id'))
+            if data.get('OptionClubId',0) == club:
+                membership = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_product'))
+                self.golf_membership =  membership
+        if not self.l10n_ar_afip_responsibility_type_id:
+            self.l10n_ar_afip_responsibility_type_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_responsibility'))
+        if not self.vat:
+            self.l10n_latam_identification_type_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_identification_type'))
+            self.vat = data.get('DocNumber')
+        
+        
     def action_update_handicap(self):
         for record in self:
             if record.golf_license:
                 # get data from AAG
                 data = aag_api.get_enrolled(record.golf_license)
-                record.golf_handicap_index = data.get('HandicapIndex')
-                record.golf_handicap = aag_api.get_handicap(record.golf_handicap_index)
+                record.update_from_external(data)
                 
     def action_golf_membership_invoice(self):
         """ Generates golf membership invoices for selected records"""

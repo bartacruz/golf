@@ -29,6 +29,18 @@
         </notebook>
     </field>
 </record>
+<record id="view_partner_golf_filter" model="ir.ui.view">
+    <field name="name">res.partner.select.inherit</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_res_partner_filter" />
+    <!-- <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/> -->
+    <field name="arch" type="xml">
+        <xpath expr="//filter[@name='inactive']" position="before">
+            <filter string="Socios" name="type_golf_members" domain="[('golf_membership', '!=', False)]" />
+        </xpath>
+    </field>
+</record>
+
 <record id="golf_membership_invoice_action" model="ir.actions.server">
     <field name="name">Generate Membership Invoice</field>
     <field name="binding_model_id" ref="base.model_res_partner"/>

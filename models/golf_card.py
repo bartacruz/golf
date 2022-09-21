@@ -51,6 +51,11 @@ class GolfCard(models.Model):
         copy=False,
         default=lambda self: self._default_stage_id(),
     )
+    external_reference = fields.Integer()
+    
+    def set_score(self,hole_number,score):
+        golf_score = self.score_ids.filtered(lambda s: s.hole_number == hole_number)
+        golf_score.score = score
 
     @api.depends('position', 'position_tied')
     def _compute_position_label(self):
@@ -114,12 +119,15 @@ class GolfCard(models.Model):
     def _set_handicap(self):
         for record in self:
             if not record.player_id:
+                print("no player",record,record.player_id)
                 return
             field = record.tournament_id.field_id
             player = record.player_id
 
             record.player_handicap = record._calculate_handicap(field,player)
             record.player_license = player.golf_license
+            print("_set_handicap",record,record.player_id.name,record.player_handicap,record.player_license)
+            
 
     @api.depends("score_ids")
     def _calculate_score(self):
@@ -226,6 +234,7 @@ class GolfScore(models.Model):
                               required=True, ondelete='cascade', index=True, copy=False)
     hole_id = fields.Many2one('golf.hole', string='Hole',
                               required=True, ondelete='cascade', index=True, copy=False)
+    hole_number = fields.Integer(related='hole_id.number',readonly=True,store=True)
     field_name = fields.Char(compute='_set_field_name', store=True)
 
     score = fields.Integer(string='Score')

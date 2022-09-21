@@ -20,10 +20,15 @@ def get_auth():
     #print(auth)
     return auth
 
-def do_get(action):
+def do_get(action, data=None):
     rurl = '%s%s' % (root_api,action)
     auth = get_auth()
-    r = requests.get(rurl,headers={'Authorization':auth})
+    if data:
+        r = requests.get(rurl,params=data,headers={'Authorization':auth})    
+    else:
+        r = requests.get(rurl,headers={'Authorization':auth})
+    print(auth)
+    print(r.url)
     return r
 
 def do_post(action,data):
@@ -43,3 +48,20 @@ def get_enrolled(license):
 def get_handicap(handicap_index):
     handicap = round(handicap_index * (course_slope/113)+(course_rating-course_par))
     return handicap
+
+def get_fields():
+    action = "/fields"
+    r = do_get(action)
+    #print(r.json())
+    return r.json()[0]
+
+def get_tournaments():
+    action = "/tournament"
+    r = do_get(action)
+    print(r.text)
+    return r.json()
+
+def get_tournament(tournament_id):
+    action = "/tournament"
+    r = do_get(action,{'Id':tournament_id})
+    return r.json()

@@ -21,8 +21,13 @@
         <field name="priority" eval="16" />
         <field name="active" eval="True" />
         <field name="arch" type="xml">
-            <tree string="model_tree" create="true" delete="true" edit="true">
+            <tree string="model_tree" create="true" delete="true" edit="true" default_order="date desc">
+                <field name="date" />
                 <field name="name" />
+                <field name="field_id" />
+                <field name="field_ids" />
+                <field name="card_count" />
+                <field name="parent_id" />
             </tree>
         </field>
     </record>
@@ -34,16 +39,16 @@
         <field name="arch" type="xml">
             <form string="model_form" create="true" delete="true" edit="true">
                 <header>
-
+                    <button name="fetch_tournament" string="Fetch" type="object" class="oe_highlight" />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <field name="website_url" invisible="1"/>
-                        <field name="is_published" widget="website_redirect_button"/>
-                        <field name="active_card_count" invisible="1"/>
+                        <field name="website_url" invisible="1" />
+                        <field name="is_published" widget="website_redirect_button" />
+                        <field name="active_card_count" invisible="1" />
                         <button class="oe_stat_button" type="action" name="%(action_golf_cards_related)d" icon="fa-id-card">
                             <field string="Cards" name="card_count" widget="statinfo" />
-                        </button>    
+                        </button>
                         <button class="oe_stat_button" type="object" attrs="{'invisible': [('active_card_count', '=', 0)]}" name="action_open_leaderboard" icon="fa-trophy" context="{'tournament_id': active_id}">
                             <span class="o_stat_text">Leaderboard</span>
                         </button>
@@ -61,14 +66,12 @@
                             <field name="website_published" />
                         </group>
                         <group id="main-right">
-                            <field name="field_id" options="{'no_create_edit': True}">
-                                
-                            </field>
+                            <field name="field_id" options="{'no_create_edit': True}"></field>
                             <field name="tournament_mode_id" options="{'no_create_edit': True}" />
                         </group>
                     </group>
                     <group>
-                        <field name="notes" placeholder="Notes"/>
+                        <field name="notes" placeholder="Notes" />
                     </group>
                     <notebook>
                         <page string="Players">
@@ -79,6 +82,12 @@
                                     <field name="phone" />
                                 </tree>
                             </field>
+                        </page>
+                        <page string="Relations">
+                            <group>
+                                <field name="parent_id" />
+                                <field name="child_ids" />
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -128,5 +137,5 @@
         <field name="name">Golf Home</field>
         <field name="tag">golf.homepage</field>
     </record>
-    
+
 </odoo>

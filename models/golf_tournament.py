@@ -1,7 +1,9 @@
+from pprint import pprint
 from odoo import models, fields, _, api
 from odoo.exceptions import ValidationError
 from itertools import chain, groupby
 from operator import attrgetter
+from . import aag_api
 class GolfTournament(models.Model):
     _name = 'golf.tournament'
     _description = 'a golf tournament'
@@ -17,7 +19,8 @@ class GolfTournament(models.Model):
     )
 
     date = fields.Date(string=_('Date'))
-
+    parent_id = fields.Many2one('golf.tournament')
+    child_ids = fields.One2many('golf.tournament', 'parent_id')
     field_ids = fields.Many2many(
         string=_('Fields'),
         comodel_name='golf.field',
@@ -41,7 +44,8 @@ class GolfTournament(models.Model):
     )
     tournament_mode_id = fields.Many2one('golf.tournament_mode', string = _('Mode'))
     
-
+    external_reference = fields.Integer()
+    
     @api.depends('card_ids')
     def _count_cards(self):
         for rec in self:
@@ -49,6 +53,45 @@ class GolfTournament(models.Model):
             rec.active_card_count = len([x for x in rec.card_ids if x.net_score > 0])
             rec.player_ids = rec.mapped("card_ids.player_id")
     
+    @api.model
+    def fetch_tournament(self,tid=None):
+        number = 209764
+        t =aag_api.get_tournament(number)
+        pprint(t)
+        tournament = self.search([('external_reference','=',t.get('Id'))])
+        print("tournament",tournament)
+        if not tournament:
+            vals = {
+                'name': t.get('Title'),
+                'date': t.get('StartDate'),
+                'external_reference': t.get('Id'),
+                'field_id': self.env['golf.field'].search([('external_reference','=',t.get('Field'))]).id,
+            }
+            print("vals",vals)
+            tournament = self.create(vals)
+            print("tournament",tournament)
+        for card in t.get('ScoreCards'):
+            if card.get('Status') not in ['Original','Ajuste']:
+                continue
+            player = self.env['res.partner'].search([('golf_license','=',card.get('EnrollmentNumber'))])
+            if not player:
+                print("creando desde aag",card.get('EnrollmentNumber'))
+                player = self.env['res.partner'].create_from_external(card.get('EnrollmentNumber'))
+            vals={
+                'external_reference': card.get('Id'),
+                'tournament_id': tournament.id,
+                'player_id': player.id,
+            }
+            scorecard = self.env['golf.card'].create(vals)
+            scorecard._set_handicap()
+            
+            for hole,score in {k:v for k,v in card.items() if k.startswith('ScoreGrossHole')}.items():
+                hole_number=int(hole.replace('ScoreGrossHole',''))
+                scorecard.set_score(hole_number,score)
+            
+        tournament.action_leaderboard()
+        return tournament
+        
     def get_holes(self):
         holes = list(self.field_id.hole_ids)
         return holes

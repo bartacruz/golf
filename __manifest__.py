@@ -15,7 +15,7 @@
     'version': '15.0.0.1.11',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','website','mail','account'],
+    'depends': ['base','website','mail','account','l10n_ar'],
 
     # always loaded
     'data': [
@@ -27,6 +27,7 @@
         'views/golf_player.xml',
         'views/golf_tournament.xml',
         'views/golf_cardstage.xml',
+        'views/res_config_settings.xml',
         'views/res_partner.xml',
         'views/menu.xml',
         'views/website_golf.xml',
