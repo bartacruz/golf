@@ -15,7 +15,7 @@
                     </section>
                 </div>
                 <div class="container">
-                    <div class="card-group">
+                    <div class="golf-tournament-cards">
                         <t t-foreach="tournaments" t-as="tournament">
                             <div class="card m-1">
                                 <div class="card-header">

@@ -46,6 +46,14 @@
                                                 <label class="o_light_label" string="Responsabilid AFIP" for="golf_default_responsibility" />
                                             </div>
                                             <field name="golf_default_responsibility" class="col-lg-6" />
+                                            <div class="col-lg-6">
+                                                <label class="o_light_label" string="Field 18 holes" for="golf_default_field_18" />
+                                            </div>
+                                            <field name="golf_default_field_18" class="col-lg-6" />
+                                            <div class="col-lg-6">
+                                                <label class="o_light_label" string="Field 9 holes" for="golf_default_field_9" />
+                                            </div>
+                                            <field name="golf_default_field_9" class="col-lg-6" />
                                         </div>
                                     </div>
                                 </div>

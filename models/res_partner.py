@@ -71,10 +71,10 @@ class ResPartner(models.Model):
                 'firstname': player.get('FirstNames').title(),
                 'lastname': player.get('LastNames').title(),
             })
-            print("nuevo jugador",partner.name)
+            print("nuevo jugador",partner.name, player)
             
         partner.golf_license = int(player.get('EnrollmentNumber'))
-        partner.update_from_external(partner)
+        partner.update_from_external(player)
     
         return partner
             
@@ -92,8 +92,11 @@ class ResPartner(models.Model):
         if not self.l10n_ar_afip_responsibility_type_id:
             self.l10n_ar_afip_responsibility_type_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_responsibility'))
         if not self.vat:
-            self.l10n_latam_identification_type_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_identification_type'))
-            self.vat = data.get('DocNumber')
+            try:
+                self.l10n_latam_identification_type_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_identification_type'))
+                self.vat = data.get('DocNumber')
+            except:
+                print("Error al setear el dni de ",self.name,': ', data.get('DocNumber'))
         
         
     def action_update_handicap(self):

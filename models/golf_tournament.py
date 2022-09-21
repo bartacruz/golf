@@ -45,6 +45,28 @@ class GolfTournament(models.Model):
     tournament_mode_id = fields.Many2one('golf.tournament_mode', string = _('Mode'))
     
     external_reference = fields.Integer()
+    posted = fields.Boolean(string=_('Posted')) # posted to AAG
+    
+    state = fields.Selection(selection=[
+            ('new', 'New'),
+            ('active', 'Active'),
+            ('finished', 'Finished'),
+            ('cancelled', 'Cancelled'),
+        ], string='Status', required=True, readonly=True, copy=False, tracking=True,
+        default='new')
+    
+    
+    def action_activate(self):
+        for record in self:
+            self.state = 'active'
+    
+    def action_finish(self):
+        for record in self:
+            self.state = 'finished'
+
+    def action_cancel(self):
+        for record in self:
+            self.state = 'cancel'
     
     @api.depends('card_ids')
     def _count_cards(self):
@@ -53,23 +75,41 @@ class GolfTournament(models.Model):
             rec.active_card_count = len([x for x in rec.card_ids if x.net_score > 0])
             rec.player_ids = rec.mapped("card_ids.player_id")
     
-    @api.model
+    def _check_name(self):
+        for record in self:
+            if record.name == _('New') or record.name == 'SPGC' and record.tournament_mode_id:
+                record.name = '%s - %d hoyos' % (record.tournament_mode_id.name, record.field_id.hole_count,)
+                print("_check_name",record.name)
+    
     def fetch_tournament(self,tid=None):
-        number = 209764
-        t =aag_api.get_tournament(number)
-        pprint(t)
-        tournament = self.search([('external_reference','=',t.get('Id'))])
-        print("tournament",tournament)
-        if not tournament:
-            vals = {
-                'name': t.get('Title'),
-                'date': t.get('StartDate'),
-                'external_reference': t.get('Id'),
-                'field_id': self.env['golf.field'].search([('external_reference','=',t.get('Field'))]).id,
-            }
-            print("vals",vals)
-            tournament = self.create(vals)
-            print("tournament",tournament)
+        self.ensure_one()
+        
+        if not self.external_reference:
+            return False
+        
+        t =aag_api.get_tournament(self.external_reference)
+        print(t)
+        self.tournament_mode_id = self.env['golf.tournament_mode'].search([('external_reference','=',t.get('GameMode'))]).id
+        self.date = t.get('StartDate')
+        # TODO: chequear si se puede crear en la AAG un campo para 9 hoyos.
+        if t.get('BatchesHoles',0) == 9:
+            self.field_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.default_field_9'))
+        else:
+            self.field_id = self.env['golf.field'].search([('external_reference','=',t.get('Field'))]).id
+        
+        # Hack para los que tienen titulo generico
+        if t.get('Title') == 'SPGC':
+            self._check_name()
+        else:
+            self.name = t.get('Title')
+        
+        if t.get('Active',False):
+            self.state = 'active'
+        else:
+            self.state = 'finished'
+    
+        self.posted = True
+        
         for card in t.get('ScoreCards'):
             if card.get('Status') not in ['Original','Ajuste']:
                 continue
@@ -79,7 +119,7 @@ class GolfTournament(models.Model):
                 player = self.env['res.partner'].create_from_external(card.get('EnrollmentNumber'))
             vals={
                 'external_reference': card.get('Id'),
-                'tournament_id': tournament.id,
+                'tournament_id': self.id,
                 'player_id': player.id,
             }
             scorecard = self.env['golf.card'].create(vals)
@@ -89,8 +129,21 @@ class GolfTournament(models.Model):
                 hole_number=int(hole.replace('ScoreGrossHole',''))
                 scorecard.set_score(hole_number,score)
             
-        tournament.action_leaderboard()
+        self.action_leaderboard()
+        return self
+    
+    @api.model
+    def create(self,vals):
+        tournament = super(GolfTournament, self).create(vals)
+        if vals.get("name", _("New")) == _("New"):
+            tournament._check_name()
         return tournament
+    
+    def write(self, vals):
+        t =  super().write(vals)
+        if self.name== _("New"):
+            self._check_name()
+        return t
         
     def get_holes(self):
         holes = list(self.field_id.hole_ids)

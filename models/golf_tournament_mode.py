@@ -7,7 +7,7 @@ class GolfTournamentMode(models.Model):
 
     name = fields.Char()
     code = fields.Char(required=True)
-
+    external_reference = fields.Integer()
     default = fields.Boolean(default=False)
 
     def _process_cards(self,tournament):

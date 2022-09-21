@@ -12,5 +12,7 @@ class ResConfigSettings(models.TransientModel):
     golf_default_identification_type = fields.Many2one("l10n_latam.identification.type", config_parameter='golf.default_identification_type')
     golf_default_responsibility = fields.Many2one("l10n_ar.afip.responsibility.type", config_parameter='golf.default_responsibility')
 
+    golf_default_field_18 = fields.Many2one("golf.field",string=_("Default field 18"), config_parameter='golf.default_field_18')
+    golf_default_field_9 = fields.Many2one("golf.field",string=_("Default field 9"), config_parameter='golf.default_field_9')
     golf_members_pricelist = fields.Many2one('product.pricelist', config_parameter='golf.members_pricelist')
     
