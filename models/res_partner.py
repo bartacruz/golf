@@ -113,7 +113,13 @@ class ResPartner(models.Model):
                 # get data from AAG
                 data = aag_api.get_enrolled(record.golf_license)
                 record.update_from_external(data)
-                
+
+    def action_update_pricelist(self):
+        pricelist_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.members_pricelist'))
+        for record in self:
+            if record.golf_membership:
+                record.property_product_pricelist = pricelist_id
+
     def action_golf_membership_invoice(self):
         """ Generates golf membership invoices for selected records"""
         ref = str(uuid.uuid4())[:8]

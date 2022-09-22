@@ -67,6 +67,15 @@
         <field name="state">code</field>
         <field name="code">action = records.action_update_handicap()</field>
     </record>
+    <record id="golf_update_pricelist_action" model="ir.actions.server">
+        <field name="name">Update members pricelist</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="model_id" ref="base.model_res_partner" />
+
+        <field name="state">code</field>
+        <field name="code">action = records.action_update_pricelist()</field>
+    </record>
     <template id="portal_docs_entry" name="My Portal Docs Entry" inherit_id="portal.portal_docs_entry">
         <a t-att-href="url" t-att-title="title" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" position="replace">
             <a t-if="placeholder_count != '0'" class="col-5 align-items-center justify-content-between" t-att-href="url" t-att-title="title">
