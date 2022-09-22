@@ -71,6 +71,7 @@ class GolfTournament(models.Model):
     def action_activate(self):
         for record in self:
             self.state = 'active'
+            self.website_published = True
     
     def action_finish(self):
         for record in self:
@@ -78,7 +79,8 @@ class GolfTournament(models.Model):
 
     def action_cancel(self):
         for record in self:
-            self.state = 'cancel'
+            self.state = 'cancelled'
+            self.website_published = False
     
     @api.depends('card_ids')
     def _count_cards(self):
