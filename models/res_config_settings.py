@@ -9,6 +9,9 @@ class ResConfigSettings(models.TransientModel):
 
     golf_club_id = fields.Char(config_parameter='golf.club_id')
     golf_default_product = fields.Many2one("product.product",string=_("Default product"), config_parameter='golf.default_product')
+    golf_tournament_product = fields.Many2one("product.product",string=_("Tournament product"), config_parameter='golf.tournament_product')
+    golf_tournament_product_weekend = fields.Many2one("product.product",string=_("Tournament product weekend"), config_parameter='golf.tournament_product_weekend')
+    
     golf_default_identification_type = fields.Many2one("l10n_latam.identification.type", config_parameter='golf.default_identification_type')
     golf_default_responsibility = fields.Many2one("l10n_ar.afip.responsibility.type", config_parameter='golf.default_responsibility')
 

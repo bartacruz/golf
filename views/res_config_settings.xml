@@ -9,35 +9,65 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('settings')]" position="inside">
                     <div class="app_settings_block" data-string="Golf" id="golf" string="Golf" data-key="golf">
-                        <h2>Facturación</h2>
+                        <h2>Datos del club</h2>
                         <div class="row mt16 o_settings_container" id="golf_defaults">
                             <div class="col-12 col-lg-6 o_setting_box">
 
                                 <div class="o_setting_right_pane">
-                                    <label for="golf_club_id" string="Datos del Club" />
                                     <div class="content-group">
                                         <div class="row mt16">
                                             <label class="col-lg-3 o_light_label" string="Club ID" for="golf_club_id" />
                                             <field name="golf_club_id" />
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Facturación</h2>
+                        <div class="row mt16 o_settings_container" id="golf_defaults">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="golf_members_pricelist" string="Productos" />
+                                    <div class="content-group">
                                         <div class="row mt16">
-                                            <label class="col-lg-3 o_light_label" string="Lista de precios socios" for="golf_members_pricelist" />
-                                            <field name="golf_members_pricelist" />
+                                            <div class="col-lg-6">
+                                            <label class="o_light_label" string="Lista de precios socios" for="golf_members_pricelist" />
+                                            </div>
+                                            <field class="col-lg-6" name="golf_members_pricelist" />
+                                            <div class="col-lg-6">
+                                                <label class="o_light_label" string="Membresía" for="golf_default_product" />
+                                            </div>
+                                            <field name="golf_default_product" class="col-lg-6" />
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6 o_setting_box">
                                 <div class="o_setting_right_pane">
-                                    <label for="golf_default_product" string="Defaults" />
-                                    <div class="text-muted">Para los torneos importados</div>
+                                    <label for="golf_tournament_product" string="Green Fees" />
                                     <div class="content-group">
                                         <div class="row mt16">
                                             <div class="col-lg-6">
-                                                <label class="o_light_label" string="Producto Default" for="golf_default_product" />
+                                                <label class="o_light_label" string="Semanal" for="golf_tournament_product" />
                                             </div>
-                                            <field name="golf_default_product" class="col-lg-6" />
+                                            <field name="golf_tournament_product" class="col-lg-6" />
+                                            <div class="col-lg-6">
+                                                <label class="o_light_label" string="Fin de semana" for="golf_tournament_product_weekend" />
+                                            </div>
+                                            <field name="golf_tournament_product_weekend" class="col-lg-6" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Importación</h2>
+                        <div class="row mt16 o_settings_container" id="golf_defaults">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="golf_default_identification_type" string="Defaults" />
+                                    <div class="text-muted">Para los torneos importados</div>
+                                    <div class="content-group">
+                                        <div class="row mt16">
                                             <div class="col-lg-6">
                                                 <label class="o_light_label" string="Tipo de documento" for="golf_default_identification_type" />
                                             </div>

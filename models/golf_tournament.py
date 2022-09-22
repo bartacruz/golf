@@ -59,6 +59,15 @@ class GolfTournament(models.Model):
     
     category = fields.Selection(selection=[('0','Caballeros'),('1','Damas')], default='0')
     
+    @api.onchange('date')
+    def _default_product(self):
+        if not self.date:
+            return
+        if self.date.weekday() > 4:
+            self.default_product_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.tournament_product_weekend'))
+        else:
+            self.default_product_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.tournament_product'))
+    
     def action_activate(self):
         for record in self:
             self.state = 'active'
