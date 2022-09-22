@@ -34,8 +34,12 @@ class GolfCard(models.Model):
     gross_score = fields.Integer(compute='_calculate_score', store=True)
     net_score = fields.Integer(compute='_calculate_score', store=True)
 
+    gross_score_first = fields.Integer(string=_('First 9'),compute='_calculate_score', store=True)
+    gross_score_last = fields.Integer(string=_('Last 9'),compute='_calculate_score', store=True)
+    
     player_handicap = fields.Integer(string=_('Handicap'))
     player_license = fields.Integer(string=_('Golf license'))
+    player_license_active = fields.Boolean(string=_('License Active'), related='player_id.golf_license_active', readonly=True)
 
     position = fields.Integer(default=0)
     position_tied = fields.Boolean()
@@ -44,6 +48,13 @@ class GolfCard(models.Model):
     account_move_id = fields.Many2one(
         'account.move', string='Invoice', readonly=True, copy=False)
 
+    stage = fields.Selection(selection=[
+        ('new','New'),
+        ('active','Active'),
+        ('presented','Presented'),
+        ('loaded','Loaded'),
+        ('cancelled','Cancelled'),
+        ], default='new')
     stage_id = fields.Many2one(
         "golf.cardstage",
         string="Stage",
@@ -52,6 +63,7 @@ class GolfCard(models.Model):
         default=lambda self: self._default_stage_id(),
     )
     external_reference = fields.Integer()
+    posted = fields.Boolean()
     
     def set_score(self,hole_number,score):
         golf_score = self.score_ids.filtered(lambda s: s.hole_number == hole_number)
@@ -97,7 +109,8 @@ class GolfCard(models.Model):
                 limit=1,)
             if len(stage):
                 self.stage_id = stage[0]
-
+        
+            
     def _calculate_handicap(self,field, player):
         if player.golf_handicap_index > 0:
             handicap = round(
@@ -134,6 +147,8 @@ class GolfCard(models.Model):
         for rec in self:
             net = rec.net_score  # save it to detect changes
             rec.gross_score = sum(c.score for c in rec.score_ids)
+            rec.gross_score_first = sum(c.score for c in rec.score_ids[0:9])
+            rec.gross_score_last = sum(c.score for c in rec.score_ids[9:18])
             if rec.gross_score > 0:
                 rec.net_score = rec.gross_score - rec.player_handicap
             else:
@@ -155,7 +170,35 @@ class GolfCard(models.Model):
                 }
                 self.env["golf.score"].sudo().create(values)
         return card
-
+    
+    def write(self, vals):
+        r = super().write(vals)
+        if self.stage not in ['loaded','cancelled'] and not self.score_ids.filtered(lambda s: s.score == 0):
+            print("tarjeta cargada!", [s.score for s in self.score_ids])
+            self.stage = 'loaded'
+            return True
+        return r
+    
+    def action_presented(self):
+        for record in self:
+            self.stage = 'presented'
+            
+    def get_external_data(self):
+        scores = []
+        data = {
+            'Id': self.id,
+            'EnrollmentNumber': self.player_license,
+            'BatchNumber': 1,
+            'IniHole': 1,
+            'State': 1,
+            'ScoreGrossTotal': self.gross_score,
+            'ScoreGrossIda': self.gross_score_first,
+            'ScoreGrossVta': self.gross_score_last,
+        }
+        for score in self.score_ids:
+            data['ScoreGrossHole%02d' % score.hole_number] = score.score
+        return data
+    
     def action_view_invoice(self):
         action = self.env.ref("account.action_move_out_invoice_type").read()[0]
         action["views"] = [(self.env.ref("account.view_move_form").id, "form")]

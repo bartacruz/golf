@@ -21,18 +21,22 @@
         <field name="priority" eval="16" />
         <field name="active" eval="True" />
         <field name="arch" type="xml">
-            <tree string="model_tree" create="true" delete="true" edit="true" default_order="net_score, gross_score,player_id">
+            <tree string="model_tree" create="true" delete="true" edit="true" default_order="net_score, gross_score,player_id" >
                 <field name="player_id" />
                 <field name="player_license" />
+                <field name="player_license_active" />
                 <field name="date" />
                 <field name="tournament_id" />
-                <field name="stage_id" />
+                <field name="stage" widget="badge" decoration-success="stage=='loaded'"/>
                 
                 <field name="marker_id" />
+                <field name="gross_score_first" />
+                <field name="gross_score_last" />
                 <field name="gross_score" />
                 <field name="player_handicap" />
                 <field name="net_score" />
                 <field name="position_label" />
+
             </tree>
         </field>
     </record>
@@ -63,8 +67,9 @@
             <form string="model_form" create="true" delete="true" edit="true">
                 <field name="account_move_id" invisible="1" />
                 <header>
+                    <button type="object" name="action_presented" string="Presentada" />
                     <field
-                        name="stage_id"
+                        name="stage"
                         widget="statusbar"
                     />
                 </header>
@@ -118,6 +123,7 @@
                             <field name="tournament_id" />
                             <field name="date" />
                             <field name="account_move_id" readonly="1" />
+                            <field name="posted" />
                         </group>
                     </group>
                     <group>
@@ -128,6 +134,8 @@
                                 <field name="field_name"></field>
                             </tree>
                         </field>
+                        <field name="gross_score_first" readonly="1" />
+                        <field name="gross_score_last" readonly="1" />
                         <field name="gross_score" readonly="1" />
                         <field name="player_handicap" />
                         <field name="net_score" readonly="1" />

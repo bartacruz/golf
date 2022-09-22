@@ -24,8 +24,8 @@
             <tree string="model_tree" create="true" delete="true" edit="true" default_order="date desc">
                 <field name="date" />
                 <field name="name" />
+                <field name="category" />
                 <field name="field_id" />
-                <field name="field_ids" />
                 <field name="card_count" />
                 <field name="parent_id" />
                 <field name="state" widget="badge" decoration-info="state == 'new'" decoration-success="state == 'finished'" decoration-warning="state == 'active'"/>
@@ -44,13 +44,16 @@
             <form string="model_form" create="true" delete="true" edit="true">
                 <header>
                     <button name="fetch_tournament" string="Fetch" type="object" class="oe_highlight" attrs="{'invisible' : [('external_reference','=','False')]}"/>
+                    <button name="post_external" string="Post" type="object" class="oe_highlight" attrs="{'invisible' : ['|',('posted','=',True),('state','!=','finished')]}"/>
                     <button name="action_activate" string="Activate" type="object"  attrs="{'invisible' : [('state','!=','new')]}"/>
                     <button name="action_finish" string="Finish" type="object"  attrs="{'invisible' : [('state','in',['finished','cancelled'])]}"/>
                     <button name="action_cancel" string="Cancel" type="object"  attrs="{'invisible' : [('state','in',['finished','cancelled'])]}"/>
                     <button name="action_leaderboard" string="Calculate" type="object" />
                     <field name="state" widget="statusbar"/>
+
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Posted" attrs="{'invisible': [('posted', '=', False)]}"/>
                     <div class="oe_button_box" name="button_box">
                         <field name="website_url" invisible="1" />
                         <field name="is_published" widget="website_redirect_button" />
@@ -77,6 +80,7 @@
                         <group id="main-right">
                             <field name="field_id" options="{'no_create_edit': True}"></field>
                             <field name="tournament_mode_id" options="{'no_create_edit': True}" />
+                            <field name="category" />
                         </group>
                     </group>
                     <group>

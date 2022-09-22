@@ -3,7 +3,8 @@ import json
 import requests
 import base64
 
-#root_api = 'http://aag-web-test.tecnocode.net/api/supplier'
+#root_web = 'http://aag-web-test.tecnocode.net/api/supplier'
+
 #root_api = 'http://aag-api-test.tecnocode.net/api/supplier' #test
 root_api = 'https://aag-api-prod.azurewebsites.net/api/supplier' #prod
 user = 'sistema365'
@@ -42,8 +43,11 @@ def get_enrolled(license):
     data = '[%s]' % license
     action = "/enrolleds"
     r = do_post(action,data)
-    #print(r.json())
-    return r.json()[0]
+    print(r.json())
+    if r.json():
+        return r.json()[0]
+    else:
+        return False
 
 def get_handicap(handicap_index):
     handicap = round(handicap_index * (course_slope/113)+(course_rating-course_par))
@@ -52,6 +56,7 @@ def get_handicap(handicap_index):
 def get_fields():
     action = "/fields"
     r = do_get(action)
+    print(r.text)
     #print(r.json())
     return r.json()[0]
 
@@ -64,4 +69,9 @@ def get_tournaments():
 def get_tournament(tournament_id):
     action = "/tournament"
     r = do_get(action,{'Id':tournament_id})
+    return r.json()
+
+def post_tournament(data):
+    action = "/tournament"
+    r = do_post(action,json.dumps(data))
     return r.json()

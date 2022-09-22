@@ -1,63 +1,97 @@
 <odoo>
-<record id="golf_partner_fields" model="ir.ui.view">
-    <field name="name">res.partner.golf.form</field>
-    <field name="model">res.partner</field>
-    <field name="inherit_id" ref="base.view_partner_form" />
-    <field name="arch" type="xml">
-        <div name="button_box" position="inside">
-            <button class="oe_stat_button" type="object" attrs="{'invisible': [('golf_card_count', '=', 0)]}" name="action_open_golf_cards" icon="fa-id-card" context="{'player_id': active_id}">
-                <field string="Cards" name="golf_card_count" widget="statinfo" />
-            </button>
-        </div>
-        <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
-                <field name="golf_membership" readonly="1" widget="many2many_tags"/>
-        </xpath>
-        <notebook position="inside">
-            <page string="Golf">
-                <group>
+    <record id="golf_partner_fields" model="ir.ui.view">
+        <field name="name">res.partner.golf.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+
+                <button class="oe_stat_button" type="object" attrs="{'invisible': [('golf_card_count', '=', 0)]}" name="action_open_golf_cards" icon="fa-id-card" context="{'player_id': active_id}">
+                    <field string="Cards" name="golf_card_count" widget="statinfo" />
+                </button>
+            </div>
+            <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
+                <field name="golf_membership" readonly="1" widget="many2many_tags" />
+            </xpath>
+            <page name="contact_addresses" position="before">
+                <page string="Golf" autofocus="autofocus">
                     <group>
-                        <field name="golf_player" />
-                        <field name="golf_license" />
-                        <field name="golf_membership" />
+                        <group>
+                            <field name="golf_player" />
+                            <field name="golf_license" />
+                            <field name="golf_license_active" />
+                            <field name="golf_membership" />
+                        </group>
+                        <group>
+                            <field name="golf_handicap" />
+                            <button string="Update" class="oe_highlight" type="object" attrs="{'invisible': [('golf_license', '=', False)]}" name="action_update_handicap" context="{'player_id': active_id}"></button>
+                            <field name="golf_handicap_index" />
+                        </group>
                     </group>
-                    <group>
-                        <field name="golf_handicap" />
-                        <field name="golf_handicap_index" />
-                    </group>
-                </group>
+                </page>
             </page>
-        </notebook>
-    </field>
-</record>
-<record id="view_partner_golf_filter" model="ir.ui.view">
-    <field name="name">res.partner.select.inherit</field>
-    <field name="model">res.partner</field>
-    <field name="inherit_id" ref="base.view_res_partner_filter" />
-    <!-- <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/> -->
-    <field name="arch" type="xml">
-        <xpath expr="//filter[@name='inactive']" position="before">
-            <filter string="Socios" name="type_golf_members" domain="[('golf_membership', '!=', False)]" />
-        </xpath>
-    </field>
-</record>
+        </field>
+    </record>
 
-<record id="golf_membership_invoice_action" model="ir.actions.server">
-    <field name="name">Generate Membership Invoice</field>
-    <field name="binding_model_id" ref="base.model_res_partner"/>
-    <field name="binding_view_types">list</field>
-    <field name="model_id" ref="base.model_res_partner"/>
+    <record id="view_partner_golf_filter" model="ir.ui.view">
+        <field name="name">res.partner.select.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <!-- <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/> -->
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="golf_license" filter_domain="[('golf_license','ilike',self)]" />
+            </field>
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter string="Socios" name="type_golf_members" domain="[('golf_membership', '!=', False)]" />
+            </xpath>
+        </field>
+    </record>
 
-    <field name="state">code</field>
-    <field name="code">action = records.action_golf_membership_invoice()</field>
-</record>
-<record id="golf_update_handicap_action" model="ir.actions.server">
-    <field name="name">Update handicap from AAG</field>
-    <field name="binding_model_id" ref="base.model_res_partner"/>
-    <field name="binding_view_types">list,form</field>
-    <field name="model_id" ref="base.model_res_partner"/>
+    <record id="golf_membership_invoice_action" model="ir.actions.server">
+        <field name="name">Generate Membership Invoice</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">list</field>
+        <field name="model_id" ref="base.model_res_partner" />
 
-    <field name="state">code</field>
-    <field name="code">action = records.action_update_handicap()</field>
-</record>
+        <field name="state">code</field>
+        <field name="code">action = records.action_golf_membership_invoice()</field>
+    </record>
 
+    <record id="golf_update_handicap_action" model="ir.actions.server">
+        <field name="name">Update handicap from AAG</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="model_id" ref="base.model_res_partner" />
+
+        <field name="state">code</field>
+        <field name="code">action = records.action_update_handicap()</field>
+    </record>
+    <template id="portal_docs_entry" name="My Portal Docs Entry" inherit_id="portal.portal_docs_entry">
+        <a t-att-href="url" t-att-title="title" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" position="replace">
+            <a t-if="placeholder_count != '0'" class="col-5 align-items-center justify-content-between" t-att-href="url" t-att-title="title">
+                <div class="pepe bg-info h-100 p-4 text-center justify-content-between">
+                    <t t-if='count'>
+                        <h1 class="sa" t-esc="count" />
+                    </t>
+                    <t t-elif="placeholder_count">
+                        <h1 t-att-data-placeholder_count="placeholder_count">
+                            <i class="fa fa-spin fa-circle-o-notch"></i>
+                        </h1>
+                    </t>
+                    <span t-esc="title" />
+                </div>
+            </a>
+        </a>
+    </template>
+    <template id="portal_my_home" name="My Portal" inherit_id="portal.portal_my_home">
+        <div class="o_portal_my_home" position="replace">
+            <div class="o_portal_my_home">
+                <div class="oe_structure" id="oe_structure_portal_my_home_1" />
+                <h3>Documents</h3>
+                <div class="o_portal_docs d-flex align-content-around"></div>
+            </div>
+        </div>
+        <div class="oe_structure" id="oe_structure_portal_my_home_2" />
+    </template>
 </odoo>

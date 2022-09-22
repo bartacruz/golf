@@ -10,6 +10,7 @@ class ResPartner(models.Model):
     golf_license = fields.Integer(
         string=_('Golf license'),
     )
+    golf_license_active = fields.Boolean(_('License is active'))
     golf_handicap = fields.Integer(
         string=_('Handicap'),
     )
@@ -61,6 +62,8 @@ class ResPartner(models.Model):
 
     def create_from_external(self,golf_license):
         player = aag_api.get_enrolled(golf_license)
+        if not player:
+            return
         # {'EnrollmentNumber': '101261', 'Active': True, 'FirstNames': 'JULIO', 'LastNames': 'SANTA CRUZ ', 'HandicapStandard': -99, 'HandicapEven3': -99, 'HandicapIndex': 15.6, 'LowestHandicapIndex': 18.1, 'OptionClubId': 365, 'Category': 0, 'BornDate': '27-8-1971', 'DocNumber': '22278642'}
         partner = self.search([
             ('firstname','ilike',player.get('FirstNames')),
@@ -81,7 +84,12 @@ class ResPartner(models.Model):
             
     def update_from_external(self,data):
         self.ensure_one()
+        print('update_from_external',data)
+        if not data:
+            self.golf_license_active=False
+            return
         self.golf_player = True
+        self.golf_license_active = data.get('Active')
         self.golf_handicap_index = data.get('HandicapIndex')
         self.golf_handicap = aag_api.get_handicap(self.golf_handicap_index)
         if not self.golf_membership:
