@@ -7,6 +7,7 @@ import pytz
 class GolfCard(models.Model):
     _name = 'golf.card'
     _description = 'a golf card'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(
         string='Name',
@@ -176,12 +177,14 @@ class GolfCard(models.Model):
         if self.stage not in ['loaded','cancelled'] and not self.score_ids.filtered(lambda s: s.score == 0):
             print("tarjeta cargada!", [s.score for s in self.score_ids])
             self.stage = 'loaded'
+            self.message_post(body=_('Card scores loaded'))
             return True
         return r
     
     def action_presented(self):
         for record in self:
             self.stage = 'presented'
+            self.message_post(body=_('Card presented'))
             
     def get_external_data(self):
         scores = []

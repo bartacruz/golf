@@ -11,6 +11,8 @@ class GolfTournament(models.Model):
     _description = 'a golf tournament'
     _inherit = [
         'website.published.mixin',
+        'mail.thread', 
+        'mail.activity.mixin'
     ]
 
     name = fields.Char(
@@ -72,15 +74,18 @@ class GolfTournament(models.Model):
         for record in self:
             self.state = 'active'
             self.website_published = True
+            self.message_post(body=_('Tournament activated'))
     
     def action_finish(self):
         for record in self:
             self.state = 'finished'
+            self.message_post(body=_('Tournament finished'))
 
     def action_cancel(self):
         for record in self:
             self.state = 'cancelled'
             self.website_published = False
+            self.message_post(body=_('Tournament cancelled'))
     
     @api.depends('card_ids')
     def _count_cards(self):
@@ -94,6 +99,7 @@ class GolfTournament(models.Model):
             if record.name == _('New') or record.name == 'SPGC' and record.tournament_mode_id:
                 record.name = '%s - %d hoyos' % (record.tournament_mode_id.name, record.field_id.hole_count,)
                 print("_check_name",record.name)
+
     def post_external(self):
         if not self.tournament_mode_id or not self.tournament_mode_id.external_reference:
             print("No se puede postear un torneo con un modo no soportado por AAG")
@@ -132,6 +138,8 @@ class GolfTournament(models.Model):
                 self.external_reference = rr[1]
                 self.posted=True
                 posted_cards.posted = True
+                posted_cards.message_post(body=_('Card posted'))
+                self.message_post(body=_('Tournament posted'))
                 return True
         else:
             print('hasError',response.keys(),response.get('HasError'))
