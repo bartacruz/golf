@@ -104,12 +104,18 @@ class GolfTournament(models.Model):
         if not self.tournament_mode_id or not self.tournament_mode_id.external_reference:
             print("No se puede postear un torneo con un modo no soportado por AAG")
             return False
+        if self.category:
+            # hack para obtener el label del campo selection
+            subtitle = dict(self._fields['category']._description_selection(self.env)).get(self.category)
+        else:
+            subtitle = ''
+        
         # Torneo guardado correctamente con id: 93802{"Description":"Proceso ","ProcessStart":"2022-09-22T13:35:44.9020323-03:00","ProcessEnd":"2022-09-22T13:35:44.9020323-03:00","HasError":false,"Errors":[],"Comments":[]}
         cards = []
         data = {
             'Id': self.id,
             'Title': self.name,
-            'Subtitle': self.name,
+            'Subtitle': subtitle,
             'GameMode': self.tournament_mode_id.external_reference,
             'BatchesCount': 1, # TODO: harcoded (numero de vueltas)
             'BatchesHoles': self.field_id.hole_count,
@@ -143,6 +149,7 @@ class GolfTournament(models.Model):
                 return True
         else:
             print('hasError',response.keys(),response.get('HasError'))
+            self.message_post(body=_('Error posting tournament'))
         
         return False
 
