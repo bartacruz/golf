@@ -161,7 +161,10 @@ odoo.define('golf.card_widget', function (require) {
             const back = this.record.data.score_ids.data.filter( s => s.data.hole_number > 9);
             console.debug("front",front);
             console.debug("back",back);
-            this._makeTable(front, this.record.data.gross_score_first,'Ida');
+            if (front.length > 0) {
+
+                this._makeTable(front, this.record.data.gross_score_first,'Ida');
+            }
             if (back.length > 0) {
                 this._makeTable(back, this.record.data.gross_score_last,'Vuelta');
             }
