@@ -130,6 +130,13 @@
         <field name="arch" type="xml">
             <search string="model_search">
                 <field name="name" />
+                <filter string="Posted" name="type_golf_tournament_posted" domain="[('posted', '=', True)]" />
+                <filter string="Unposted" name="type_golf_tournament_posted" domain="[('posted', '=', False)]" />
+                <separator />
+                <filter string="New" name="type_golf_tournament_new" domain="[('state', '=', 'new')]" />
+                <filter string="Active" name="type_golf_tournament_active" domain="[('state', '=', 'active')]" />
+                <filter string="Finished" name="type_golf_tournament_finished" domain="[('state', '=', 'finished')]" />
+                <filter string="Cancelled" name="type_golf_tournament_cancelled" domain="[('state', '=', 'cancelled')]" />
             </search>
         </field>
     </record>

@@ -29,13 +29,14 @@
                 <field name="tournament_id" />
                 <field name="stage" widget="badge" decoration-success="stage=='loaded'" />
 
-                <field name="marker_id" />
                 <field name="gross_score_first" />
                 <field name="gross_score_last" />
                 <field name="gross_score" />
                 <field name="player_handicap" />
                 <field name="net_score" />
-                <field name="position_label" />
+                <field name="position_label" class="text-center"/>
+                <field name="marker_id" />
+                
 
             </tree>
         </field>

@@ -44,6 +44,9 @@
             </field>
             <xpath expr="//filter[@name='inactive']" position="before">
                 <filter string="Socios" name="type_golf_members" domain="[('golf_membership', '!=', False)]" />
+                <filter string="Matriculados" name="type_golf_active_license" domain="[('golf_license_active', '=', True)]" />
+                <filter string="No Matriculados" name="type_golf_inactive_license" domain="[('golf_license_active', '=', False)]" />
+                <separator/>
             </xpath>
         </field>
     </record>
