@@ -21,14 +21,14 @@
         <field name="priority" eval="16" />
         <field name="active" eval="True" />
         <field name="arch" type="xml">
-            <tree string="model_tree" create="true" delete="true" edit="true" default_order="net_score, gross_score,player_id" >
+            <tree string="model_tree" create="true" delete="true" edit="true" default_order="net_score, gross_score,player_id">
                 <field name="player_id" />
                 <field name="player_license" />
                 <field name="player_license_active" />
                 <field name="date" />
                 <field name="tournament_id" />
-                <field name="stage" widget="badge" decoration-success="stage=='loaded'"/>
-                
+                <field name="stage" widget="badge" decoration-success="stage=='loaded'" />
+
                 <field name="marker_id" />
                 <field name="gross_score_first" />
                 <field name="gross_score_last" />
@@ -50,8 +50,8 @@
         <field name="active" eval="True" />
         <field name="arch" type="xml">
             <tree string="model_tree" create="true" delete="true" edit="false" default_order="net_score, gross_score,player_id">
-                <field name="position_label" string="Pos"/>
-                <field name="player_id" widget="many2one_avatar"/>
+                <field name="position_label" string="Pos" />
+                <field name="player_id" widget="many2one_avatar" />
                 <field name="gross_score" />
                 <field name="player_handicap" />
                 <field name="net_score" />
@@ -68,29 +68,16 @@
                 <field name="account_move_id" invisible="1" />
                 <header>
                     <button type="object" name="action_presented" string="Presentada" />
-                    <field
-                        name="stage"
-                        widget="statusbar"
-                    />
+                    <field name="stage" widget="statusbar" />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" 
-                            type="object" 
-                            attrs="{'invisible': [('account_move_id', '=', False)]}" 
-                            name="action_view_invoice" 
-                            icon="fa-file" 
-                            context="{'card_id': active_id}">
+                        <button class="oe_stat_button" type="object" attrs="{'invisible': [('account_move_id', '=', False)]}" name="action_view_invoice" icon="fa-file" context="{'card_id': active_id}">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_span_text">Invoice</span>
                             </div>
                         </button>
-                        <button class="oe_stat_button" 
-                            type="object" 
-                            attrs="{'invisible': [('account_move_id', '!=', False)]}" 
-                            name="action_golf_card_invoice" 
-                            icon="fa-file" 
-                            context="{'card_id': active_id}">
+                        <button class="oe_stat_button" type="object" attrs="{'invisible': [('account_move_id', '!=', False)]}" name="action_golf_card_invoice" icon="fa-file" context="{'card_id': active_id}">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_span_text">Create Invoice</span>
                             </div>
@@ -99,18 +86,11 @@
                     <div class="oe_title">
                         <label for="player_id" class="oe_edit_only" />
                         <h1>
-    
+
                             <field name="player_id" class="oe_inline" />
-                            <field name="position" class="oe_inline" invisible="1"/>
-                            <field name="position_label" 
-                                widget="badge" 
-                                readonly = "1"
-                                attrs="{'invisible': [('position', '=', 0)]}" 
-                                decoration-success = "position == 1"
-                                decoration-warning = "position in (2,3,4)" 
-                                decoration-info = "position > 4"
-                            />
-                            
+                            <field name="position" class="oe_inline" invisible="1" />
+                            <field name="position_label" widget="badge" readonly="1" attrs="{'invisible': [('position', '=', 0)]}" decoration-success="position == 1" decoration-warning="position in (2,3,4)" decoration-info="position > 4" />
+
                         </h1>
                     </div>
                     <group>
@@ -127,19 +107,24 @@
                         </group>
                     </group>
                     <group>
-                        <field name="score_ids" widget="golf_card_widget" >
+                        <field name="score_ids" widget="golf_card_widget">
                             <tree>
                                 <field name="hole_id"></field>
                                 <field name="score"></field>
                                 <field name="field_name"></field>
+                                <field name="hole_number"></field>
                             </tree>
                         </field>
-                        <field name="gross_score_first" readonly="1" />
-                        <field name="gross_score_last" readonly="1" />
-                        <field name="gross_score" readonly="1" />
-                        <field name="player_handicap" />
-                        <field name="net_score" readonly="1" />
+                        <group class="oe_subtotal_footer oe_right golf-card-totals">
+                            <field name="gross_score_first" invisible="1" />
+                            <field name="gross_score_last" invisible="1" />
+                            <field name="gross_score"  class="golf-card-subtotal" readonly="1" />
+                            <field name="player_handicap" class="golf-card-subtotal" />
+                            <field name="net_score" class="oe_subtotal_footer_separator" readonly="1" />
+                        </group>
+                        
                     </group>
+                    
                 </sheet>
             </form>
         </field>
@@ -187,7 +172,7 @@
         <field name="search_view_id" ref="view_golf_card_search" />
         <field name="context">{'default_tournament_id': active_id}</field>
         <field name="domain">[('tournament_id', '=', active_id)]</field>
-        
+
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
             Click to add new golf card
@@ -197,7 +182,7 @@
         </p>
         </field>
     </record>
-    
+
     <!-- Main window action for "model" -->
     <record id="action_golf_leaderboard_act_window" model="ir.actions.act_window">
         <field name="name">Leaderboard</field>
@@ -210,14 +195,14 @@
     <record id="paperformat_golf_card" model="report.paperformat">
         <field name="name">SPGC Card Format</field>
         <field name="default" eval="False" />
-            <field name="format">A4</field>
-            <field name="orientation">Landscape</field>
-            <field name="margin_top">0</field>
-            <field name="margin_bottom">0</field>
-            <field name="margin_left">0</field>
-            <field name="margin_right">0</field>
-            <field name="header_line" eval="False" />
-            <field name="header_spacing">0</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
     </record>
 
     <record id="action_golf_card_report" model="ir.actions.report">
@@ -226,9 +211,9 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">golf.golf_card_report</field>
         <field name="report_file">golf.golf_card_report</field>
-        <field name="binding_model_id" ref="golf.model_golf_card"/>
+        <field name="binding_model_id" ref="golf.model_golf_card" />
         <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="golf.paperformat_golf_card"/>
+        <field name="paperformat_id" ref="golf.paperformat_golf_card" />
     </record>
 
     <!-- Main menu for "model" -->
@@ -237,5 +222,23 @@
         <field name="sequence" eval="10" />
         <field name="action" ref="action_golf_card_act_window" />
         <field name="parent_id" ref="base.menu_custom" />
+    </record>
+
+    <record id="view_golf_score_tree" model="ir.ui.view">
+        <field name="name">view.golf.score.tree</field>
+        <field name="model">golf.score</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="golf_score_tree">
+                <field name="name" />
+                <field name="card_id" />
+                <field name="hole_id" />
+                <field name="hole_number" />
+                <field name="field_name" />
+                <field name="score" />
+            </tree>
+        </field>
     </record>
 </odoo>

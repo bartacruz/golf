@@ -104,6 +104,7 @@ odoo.define('golf.card_widget', function (require) {
             }
             return field;
         },
+
         __isEditable: function() {
             // Use the widget mode attribute to determine if we are editable
             return this.mode && this.mode == 'edit';
@@ -120,6 +121,33 @@ odoo.define('golf.card_widget', function (require) {
             console.debug("_render",this.record.data.score_ids.data);
             this._renderTable();
         },
+
+        _makeTable: function(data, total, title) {
+            var self = this;
+            const holes= $('<tr/>', {class: 'o_golf_holes'}).attr('field_name','front');
+            const scores= $('<tr/>', {class: 'o_golf_scores'}).attr('field_name','front');
+            const $table = $(
+                '<table class="o_list_table table table-sm table-hover table-striped o_golf_card"/>'
+            );
+
+            _.each(data,function (score,index) {
+                holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(score.data.hole_number))
+                var input = $('<input/>', {type:'number'}).attr('data-id',score.id).attr("tabIndex",score.data.hole_number).val(score.data.score);
+                if (!self.__isEditable()) {
+                    input.attr("readonly",1);
+                }
+                scores.append($('<td/>',{class: 'o_data_cell golf-hole-score'}).append(input));
+            });
+            holes.append($("<td/>", {class:"o_data_cell"}).append(title));
+            scores.append($('<td/>',{class: 'o_data_cell golf-hole-score'}).append($('<div/>', {class:'golf-card-semitotal'}).html(total) ));
+            $table.append([holes,scores]);
+            var tableWrapper = Object.assign(document.createElement('div'), {
+                className: 'table-responsive',
+            });
+            tableWrapper.appendChild($table[0]);
+            this.el.appendChild(tableWrapper);
+        },
+
         _renderTable: function(scores) {
             var self = this;
             // re-rendering triggers blur event and we loose the focusable
@@ -127,46 +155,20 @@ odoo.define('golf.card_widget', function (require) {
             console.debug("_renderTable",this,scores);
             this.rows=[];
             this.fields = {};
-            //const front = this.record.data.score_ids.data.fiter( s => s.number < 10);
-            //const back = this.record.data.score_ids.data.fiter( s => s.number > 9);
-            
-
-            _.each(this.record.data.score_ids.data,function (score,index) {
-                var field = self._get_golf_field(score.data.field_name);
-                //field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(score.data.hole_id.data.display_name))
-                field.holes.append( $('<td/>', {class: 'o_data_cell o_golf_hole_name'}).html(index+1))                    
-                var input = $('<input/>', {type:'number'}).attr('data-id',score.id).attr("tabIndex",index+1).val(score.data.score);
-                if (!self.__isEditable()) {
-                    input.attr("readonly",1);
-                }
-                field.scores.append($('<td/>',{class: 'o_data_cell o_golf_score'}).append(input));
-            });
-            const $table = $(
-                '<table class="o_list_table table table-sm table-hover table-striped o_golf_card"/>'
-            );
-            
-            for (var key in this.fields) {
-                var field = this.fields[key];
-                field.holes.append($("<td/>", {class:"o_data_cell"}).append(field.name));
-                var total = 0;
-                field.scores.find("input").each(function() {
-                    total += parseInt( $(this).val() );
-                });
-                field.scores.append($('<td/>',{class: 'o_data_cell o_golf_score'}).append($('<input/>', {type:'number',readonly:1}).val(total) ));
-                
-            }
-            $table.append(this.rows);
-            var tableWrapper = Object.assign(document.createElement('div'), {
-                className: 'table-responsive',
-            });
-            tableWrapper.appendChild($table[0]);
             this.el.innerHTML = "";
-            this.el.appendChild(tableWrapper);
-            console.debug("_renderTable",tableWrapper);
+            
+            const front = this.record.data.score_ids.data.filter( s => s.data.hole_number < 10);
+            const back = this.record.data.score_ids.data.filter( s => s.data.hole_number > 9);
+            console.debug("front",front);
+            console.debug("back",back);
+            this._makeTable(front, this.record.data.gross_score_first,'Ida');
+            if (back.length > 0) {
+                this._makeTable(back, this.record.data.gross_score_last,'Vuelta');
+            }
+            console.debug("card rendered ok", this);
             if (this.__isEditable() && focused) {
                 var next = focused + 1;
                 this.$el.find("input[tabIndex='"+next+"']").focus();
-                console.debug("focus to", next);
             }
         },
     });
