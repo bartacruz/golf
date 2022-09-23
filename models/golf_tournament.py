@@ -96,7 +96,7 @@ class GolfTournament(models.Model):
     
     def _check_name(self):
         for record in self:
-            if record.name == _('New') or record.name == 'SPGC' and record.tournament_mode_id:
+            if record.name in [_('New'),'SPGC'] and record.tournament_mode_id and record.field_id:
                 record.name = '%s - %d hoyos' % (record.tournament_mode_id.name, record.field_id.hole_count,)
                 print("_check_name",record.name)
 
@@ -193,14 +193,17 @@ class GolfTournament(models.Model):
                 'external_reference': card.get('Id'),
                 'tournament_id': self.id,
                 'player_id': player.id,
+                'posted': True,
             }
             scorecard = self.env['golf.card'].create(vals)
             scorecard._set_handicap()
+            scorecard.message_post(body='Tarjeta importada desde la AAG')
             
             for hole,score in {k:v for k,v in card.items() if k.startswith('ScoreGrossHole')}.items():
                 hole_number=int(hole.replace('ScoreGrossHole',''))
                 scorecard.set_score(hole_number,score)
-            
+        self.message_post(body='Torneo importado desde la AAG')    
+        self._default_product()
         self.action_leaderboard()
         return self
     
