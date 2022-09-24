@@ -14,7 +14,7 @@ class Golf(http.Controller):
     @http.route(['/golf'], type='http', auth="public", website=True)
     def tournaments(self, **post):
         Tournament = request.env['golf.tournament']
-        tournaments = Tournament.sudo().search([], order='date desc')
+        tournaments = Tournament.sudo().search([('website_published','=',True)], order='date desc')
         values = {'tournaments': tournaments}
         return request.render("golf.tournaments", values)
 
