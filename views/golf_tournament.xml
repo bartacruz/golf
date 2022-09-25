@@ -31,8 +31,10 @@
                 <field name="card_count" />
                 <field name="parent_id" />
                 <field name="state" widget="badge" decoration-info="state == 'new'" decoration-success="state == 'finished'" decoration-warning="state == 'active'"/>
-                <field name="external_reference" />
+
                 <field name="posted" />
+                <field name="external_reference" />
+                <field name="website_published" />
                 
             </tree>
         </field>
@@ -141,6 +143,8 @@
                 <filter string="Active" name="type_golf_tournament_active" domain="[('state', '=', 'active')]" />
                 <filter string="Finished" name="type_golf_tournament_finished" domain="[('state', '=', 'finished')]" />
                 <filter string="Cancelled" name="type_golf_tournament_cancelled" domain="[('state', '=', 'cancelled')]" />
+                <separator />
+                <filter string="Published in website" name="filter_published" domain="[('website_published', '=', True)]"/>
             </search>
         </field>
     </record>
@@ -172,5 +176,12 @@
         <field name="name">Golf Home</field>
         <field name="tag">golf.homepage</field>
     </record>
-
+    <record id="golf_tournament_toggle_website_published" model="ir.actions.server">
+        <field name="name">Toggle website published</field>
+        <field name="binding_model_id" ref="golf.model_golf_tournament" />
+        <field name="binding_view_types">list,form</field>
+        <field name="model_id" ref="golf.model_golf_tournament" />
+        <field name="state">code</field>
+        <field name="code">action = records.action_toggle_website_published()</field>
+    </record>
 </odoo>

@@ -260,3 +260,7 @@ class GolfTournament(models.Model):
         for tournament in self:
             if tournament.id:  # avoid to perform a slug on a not yet saved record in case of an onchange.
                 tournament.website_url = '/golf/tournament/%s' % slug(tournament)
+    
+    def action_toggle_website_published(self):
+        for record in self:
+            record.website_published =  not record.website_published
