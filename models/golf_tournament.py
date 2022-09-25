@@ -6,6 +6,7 @@ from odoo.exceptions import ValidationError
 from itertools import chain, groupby
 from operator import attrgetter
 from . import aag_api
+from odoo.addons.http_routing.models.ir_http import slug
 
 DEFAULT_START_HANDICAP = 0
 DEFAULT_END_HANDICAP = 54
@@ -253,4 +254,9 @@ class GolfTournament(models.Model):
     def action_leaderboard(self):
         self.tournament_mode_id._process_cards(self)
 
-    
+    @api.depends('name')
+    def _compute_website_url(self):
+        super(GolfTournament, self)._compute_website_url()
+        for tournament in self:
+            if tournament.id:  # avoid to perform a slug on a not yet saved record in case of an onchange.
+                tournament.website_url = '/golf/tournament/%s' % slug(tournament)
