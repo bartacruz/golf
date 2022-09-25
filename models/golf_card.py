@@ -129,16 +129,32 @@ class GolfCard(models.Model):
                 handicap = math.floor(handicap/2)
         return handicap
 
+    def _check_handicap(self):
+        player_handicap= self._calculate_handicap(self.tournament_id.field_id,self.player_id)
+        if player_handicap < self.tournament_id.start_handicap:
+            raise ValidationError(
+                _('Player %(player)s has a smaller handicap (%(player_handicap)s) than tournament category %(tournament_handicap)s.',
+                    player=self.player_id.name,
+                    player_handicap = player_handicap,
+                    tournament_handicap = self.tournament_id.start_handicap)
+            )
+        if player_handicap > self.tournament_id.end_handicap:
+            raise ValidationError(
+                _('Player %(player)s has a bigger handicap (%(player_handicap)s) than tournament category %(tournament_handicap)s.',
+                    player = self.player_id.name,
+                    player_handicap = player_handicap,
+                    tournament_handicap = self.tournament_id.end_handicap)
+            )
+        return player_handicap
+    
     @api.onchange('player_id')
     def _set_handicap(self):
         for record in self:
             if not record.player_id:
                 print("no player",record,record.player_id)
                 return
-            field = record.tournament_id.field_id
             player = record.player_id
-
-            record.player_handicap = record._calculate_handicap(field,player)
+            record.player_handicap = record._check_handicap()
             record.player_license = player.golf_license
             print("_set_handicap",record,record.player_id.name,record.player_handicap,record.player_license)
             

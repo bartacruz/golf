@@ -6,6 +6,9 @@ from odoo.exceptions import ValidationError
 from itertools import chain, groupby
 from operator import attrgetter
 from . import aag_api
+
+DEFAULT_START_HANDICAP = 0
+DEFAULT_END_HANDICAP = 54
 class GolfTournament(models.Model):
     _name = 'golf.tournament'
     _description = 'a golf tournament'
@@ -60,6 +63,8 @@ class GolfTournament(models.Model):
         default='new')
     
     category = fields.Selection(selection=[('0','Caballeros'),('1','Damas')], default='0')
+    start_handicap = fields.Integer(_('Start handicap'), default=DEFAULT_START_HANDICAP)
+    end_handicap = fields.Integer(_('End handicap'), default=DEFAULT_END_HANDICAP)
     
     @api.onchange('date')
     def _default_product(self):
@@ -97,7 +102,10 @@ class GolfTournament(models.Model):
     def _check_name(self):
         for record in self:
             if record.name in [_('New'),'SPGC'] and record.tournament_mode_id and record.field_id:
-                record.name = '%s - %d hoyos' % (record.tournament_mode_id.name, record.field_id.hole_count,)
+                if record.start_handicap != DEFAULT_START_HANDICAP or record.end_handicap != DEFAULT_END_HANDICAP:
+                    record.name = '%s - Cat %d-%d' % (record.tournament_mode_id.name, record.start_handicap, record.end_handicap)    
+                else:
+                    record.name = '%s - %d hoyos' % (record.tournament_mode_id.name, record.field_id.hole_count,)
                 print("_check_name",record.name)
 
     def post_external(self):
@@ -120,10 +128,10 @@ class GolfTournament(models.Model):
             'BatchesCount': 1, # TODO: harcoded (numero de vueltas)
             'BatchesHoles': self.field_id.hole_count,
             'Category': int(self.category),
-            'EndHandicap': 54,
+            'EndHandicap': self.end_handicap,
             'StartDate': datetime(self.date.year, self.date.month, self.date.day).isoformat(),
             'Field': self.field_id.external_reference,
-            'TeeOut': 4532,
+            'TeeOut': 4532, # TODO: obtenerlo desde el campo
             'Active': self.state == 'active',
             'ScoreCards': cards,
         }

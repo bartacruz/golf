@@ -25,6 +25,8 @@
                 <field name="date" />
                 <field name="name" />
                 <field name="category" />
+                <field name="start_handicap" />
+                <field name="end_handicap" />
                 <field name="field_id" />
                 <field name="card_count" />
                 <field name="parent_id" />
@@ -81,6 +83,8 @@
                             <field name="field_id" options="{'no_create_edit': True}"></field>
                             <field name="tournament_mode_id" options="{'no_create_edit': True}" />
                             <field name="category" />
+                            <field name="start_handicap" />
+                            <field name="end_handicap" />
                         </group>
                     </group>
                     <group>
