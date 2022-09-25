@@ -19,11 +19,13 @@
                         <t t-foreach="tournaments" t-as="tournament">
                             <div class="card m-1">
                                 <div class="card-header">
-                                    <span t-field="tournament.date" />
+                                    <span class="fa fa-calendar"></span><span t-field="tournament.date" />
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title" t-field="tournament.name" />
-                                    <p class="card-text" t-field="tournament.tournament_mode_id.name" />
+                                    <p class="card-text">
+                                        <span t-field="tournament.category" />
+                                        <span t-field="tournament.tournament_mode_id.name" /></p> 
                                     <a t-attf-href="/golf/tournament/#{slug(tournament)}" class="btn btn-outline-success">
                                         <span class="fa fa-trophy"></span>
                                         Leaderboard
@@ -60,7 +62,7 @@
                             <div class="col p-2">Gross</div>
                             <div class="col p-2">Hcp</div>
                             <div class="col p-2">Net</div>
-                            <div class="col p-2"></div>
+                            <!-- <div class="col p-2"></div> -->
 
                         </div>
                         <t t-foreach="leaderboard" t-as="card">
@@ -73,11 +75,11 @@
                                 <div class="col p-2" t-field="card.gross_score" />
                                 <div class="col p-2" t-field="card.player_handicap" />
                                 <div class="col p-2" t-field="card.net_score" />
-                                <div class="col p-2">
+                                <!-- <div class="col p-2">
                                     <a t-attf-href="/golf/card/#{slug(card)}" class="d-block mr-3 text-center">
                                         <span class="fa fa-search"></span>
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                         </t>
                     </div>
