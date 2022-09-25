@@ -20,7 +20,7 @@ msgstr ""
 msgid ""
 "<span class=\"fa fa-trophy\"/>\n"
 "                                        Leaderboard"
-msgstr "<span class=\"fa fa-trophy\"/>Posiciones"
+msgstr "<span class=\"fa fa-trophy\"/>Resultados"
 
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_card_form
@@ -35,7 +35,7 @@ msgstr "<span class=\"o_span_text\">Factura</span>"
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.view_golf_tournament_form
 msgid "<span class=\"o_stat_text\">Leaderboard</span>"
-msgstr "<span class=\"o_stat_text\">Posiciones</span>"
+msgstr "<span class=\"o_stat_text\">Resultados</span>"
 
 #. module: golf
 #: model:ir.model.fields,field_description:golf.field_golf_card__message_needaction
@@ -744,7 +744,7 @@ msgstr "Ultima actualizacion el"
 #. module: golf
 #: model:ir.actions.act_window,name:golf.action_golf_leaderboard_act_window
 msgid "Leaderboard"
-msgstr "Posiciones"
+msgstr "Resultados"
 
 #. module: golf
 #: code:addons/golf/models/golf_hole.py:0
@@ -1071,7 +1071,7 @@ msgstr "Puntajes"
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.tournaments
 msgid "Select one to see details"
-msgstr ""
+msgstr "Seleccione uno para ver el detalle"
 
 #. module: golf
 #: model_terms:ir.ui.view,arch_db:golf.res_config_settings_view_form

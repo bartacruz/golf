@@ -28,6 +28,10 @@
 .golf-tournament-cards {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+.golf-tournament-cards .card-header { 
+    font-size: 0.8em;
 }
 .golf-card-semitotal {
     font-weight: normal;
