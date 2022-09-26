@@ -197,6 +197,10 @@ class GolfCard(models.Model):
             return True
         return r
     
+    def is_postable(self):
+        self.ensure_one()
+        return self.player_id.golf_license_active and not self.posted and self.stage == 'loaded'
+    
     def action_posted(self):
         for record in self:
             self.posted = True

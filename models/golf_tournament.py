@@ -137,7 +137,7 @@ class GolfTournament(models.Model):
             'ScoreCards': cards,
         }
         
-        posted_cards = self.card_ids.filtered(lambda card: card.player_id.golf_license_active and not card.posted)
+        posted_cards = self.card_ids.filtered(lambda card: card.player_id.golf_license_active and not card.posted and card.stage == 'loaded')
         
         for card in posted_cards:
             if card.player_id.golf_license_active and not card.posted:
