@@ -197,6 +197,11 @@ class GolfCard(models.Model):
             return True
         return r
     
+    def action_posted(self):
+        for record in self:
+            self.posted = True
+            self.message_post(body=_('Card posted to AAG'))
+            
     def action_presented(self):
         for record in self:
             self.stage = 'presented'

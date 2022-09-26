@@ -152,8 +152,7 @@ class GolfTournament(models.Model):
             if rr:
                 self.external_reference = rr[1]
                 self.posted=True
-                posted_cards.posted = True
-                posted_cards.message_post(body=_('Card posted'))
+                posted_cards.action_posted()
                 self.message_post(body=_('Tournament posted'))
                 return True
         else:
