@@ -34,7 +34,7 @@
 
     'assets': {
         'web.assets_frontend': [
-            'golf/static/src/css/golf.scss',
+            'golf_website/static/src/css/golf.scss',
         ],
     },
 }

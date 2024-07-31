@@ -1,0 +1,49 @@
+.o_golf_holes {
+    td {
+        text-align: center;
+        background-color: black;
+        color: #CCC;
+        border: 1px solid;
+    }
+}
+.o_golf_scores {
+    td {
+        text-align: center !important;
+        vertical-align: middle;
+    }
+}
+.golf-row {
+    div {
+        font-size: 1.25rem;
+    }
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+        vertical-align: middle;
+    }
+}
+.golf-hole-score input {
+    text-align: center;
+}
+.golf-tournament-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.golf-tournament-cards .card-header { 
+    font-size: 0.8em;
+}
+.golf-card-semitotal {
+    font-weight: normal;
+    font-size: 1.3em;
+    min-width: 60px;
+    text-align: center;
+}
+.golf-card-subtotal {
+    font-weight: bold;
+    font-size: 1.3em;
+    min-width: 60px;
+}
+.golf-card-totals {
+    margin-right:15px !important;
+}
