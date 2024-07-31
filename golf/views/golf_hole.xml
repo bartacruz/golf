@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_golf_hole_tree" model="ir.ui.view">
+        <field name="name">view.golf.hole.tree</field>
+        <field name="model">golf.hole</field>
+        <field name="type">tree</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <tree string="model_tree" create="true" delete="true" edit="true">
+                <field name="name" />
+                <field name="field_id" />
+                <field name="number" />
+                <field name="par" />
+                <field name="length" />
+                <field name="handicap" />
+
+            </tree>
+        </field>
+    </record>
+    <record id="view_golf_hole_form" model="ir.ui.view">
+        <field name="name">view.golf.hole.form</field>
+        <field name="model">golf.hole</field>
+        <field name="arch" type="xml">
+            <form string="model_form" create="true" delete="true" edit="true">
+                <header></header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" class="oe_inline" placeholder="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="par" />
+                            <field name="length" />
+                            <field name="handicap" />
+                        </group>
+                        <group>
+                            <field name="field_id" />
+                            <field name="number" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_golf_hole_search" model="ir.ui.view">
+        <field name="name">view.golf.hole.search</field>
+        <field name="model">golf.hole</field>
+        <field name="type">search</field>
+        <field name="mode">primary</field>
+        <field name="priority" eval="16" />
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <search string="model_search">
+                <field name="name" />
+            </search>
+        </field>
+    </record>
+
+    <!-- Main window action for "model" -->
+    <record id="action_golf_hole_act_window" model="ir.actions.act_window">
+        <field name="name">Golf hole</field>
+        <field name="res_model">golf.hole</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_golf_hole_search" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to add new golf hole
+            </p>
+            <p>
+            Something about
+            </p>
+        </field>
+    </record>
+    <record id="menu_golf_hole" model="ir.ui.menu">
+        <field name="name">Golf hole</field>
+        <field name="sequence" eval="10" />
+        <field name="action" ref="action_golf_hole_act_window" />
+        <field name="parent_id" ref="base.menu_custom" />
+    </record>
+
+
+</odoo>

@@ -23,6 +23,7 @@
         #'security/website_golf_security.xml',
         'data/ir_sequence.xml',
         'views/golf_field.xml',
+        'views/golf_hole.xml',
         'views/golf_card.xml',
         'views/golf_player.xml',
         'views/golf_tournament.xml',
