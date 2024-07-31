@@ -242,8 +242,8 @@ class GolfCard(models.Model):
         product = self.tournament_id.default_product_id
         player = self.player_id
         if player.property_product_pricelist:
-            price = player.property_product_pricelist.get_product_price(
-                product, 1, player)
+            price = player.property_product_pricelist._get_product_price(
+                product, 1)
             name = '%s - %s' % (product.display_name,
                                 player.property_product_pricelist.name,)
         else:

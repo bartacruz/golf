@@ -32,6 +32,13 @@ class ResPartner(models.Model):
         ondelete='restrict',
     )
 
+    @api.onchange('golf_membership')
+    def _onchange_golf_membership(self):
+        pricelist_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.members_pricelist'))
+        for record in self:
+            if record.golf_membership:
+                record.property_product_pricelist = pricelist_id
+    
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         args = args or []
