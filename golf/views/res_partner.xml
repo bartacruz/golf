@@ -11,7 +11,7 @@
                 </button>
             </div>
             <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
-                <field name="golf_membership" readonly="1" widget="many2many_tags" />
+                <field name="golf_membership" readonly="1" widget="badge" />
             </xpath>
             <page name="contact_addresses" position="before">
                 <page string="Golf" autofocus="autofocus">
