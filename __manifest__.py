@@ -12,7 +12,7 @@
     'website': "http://www.bartatech.com",
 
     'category': 'Sports',
-    'version': '15.0.0.1.11',
+    'version': '15.0.0.1.12',
 
     # any module necessary for this one to work correctly
     'depends': ['base','website','mail','account','l10n_ar'],
