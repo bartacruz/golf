@@ -14,7 +14,6 @@ class GolfTournament(models.Model):
     _name = 'golf.tournament'
     _description = 'a golf tournament'
     _inherit = [
-        'website.published.mixin',
         'mail.thread', 
         'mail.activity.mixin'
     ]
@@ -76,22 +75,32 @@ class GolfTournament(models.Model):
         else:
             self.default_product_id = int(self.env['ir.config_parameter'].sudo().get_param('golf.tournament_product'))
     
+    def _activate(self):
+        self.ensure_one()
+        if not self.state == 'active':
+            self.state = 'active'
+            self.message_post(body=_('Tournament activated'))
+
     def action_activate(self):
         for record in self:
-            self.state = 'active'
-            self.website_published = True
-            self.message_post(body=_('Tournament activated'))
-    
+            record._activate()
+            
     def action_finish(self):
         for record in self:
-            self.state = 'finished'
-            self.message_post(body=_('Tournament finished'))
+            record.state = 'finished'
+            record.message_post(body=_('Tournament finished'))
+
+    def _cancel(self):
+        self.ensure_one()
+        if not self.state == 'cancelled':
+            self.state = 'cancelled'
+            self.message_post(body=_('Tournament cancelled'))
 
     def action_cancel(self):
         for record in self:
-            self.state = 'cancelled'
-            self.website_published = False
-            self.message_post(body=_('Tournament cancelled'))
+            record._cancel()
+            
+            
     
     @api.depends('card_ids')
     def _count_cards(self):
@@ -253,13 +262,4 @@ class GolfTournament(models.Model):
     def action_leaderboard(self):
         self.tournament_mode_id._process_cards(self)
 
-    @api.depends('name')
-    def _compute_website_url(self):
-        super(GolfTournament, self)._compute_website_url()
-        for tournament in self:
-            if tournament.id:  # avoid to perform a slug on a not yet saved record in case of an onchange.
-                tournament.website_url = '/golf/tournament/%s' % slug(tournament)
-    
-    def action_toggle_website_published(self):
-        for record in self:
-            record.website_published =  not record.website_published
+
